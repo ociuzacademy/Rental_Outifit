@@ -1,0 +1,236 @@
+{% extends 'user_index.html' %}
+{% block content %}
+
+<style>
+  .update-hero {
+    background: var(--charcoal);
+    padding: 64px 0 56px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .update-hero::before {
+    content: 'DRAPE';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 180px;
+    font-weight: 700;
+    color: rgba(201,169,110,0.04);
+    letter-spacing: 30px;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
+
+  .profile-avatar {
+    width: 76px; height: 76px;
+    border: 1px solid rgba(201,169,110,0.35);
+    border-radius: 50%;
+    background: rgba(201,169,110,0.08);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 300;
+    color: var(--gold-light);
+    flex-shrink: 0;
+  }
+
+  .hero-tag {
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 14px;
+  }
+
+  .hero-tag::before { content: ''; width: 30px; height: 1px; background: var(--gold); }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 4vw, 50px);
+    font-weight: 300;
+    color: var(--cream);
+    line-height: 1.1;
+  }
+
+  .hero-title em { font-style: italic; color: var(--gold-light); }
+  .hero-sub { font-size: 13px; color: rgba(245,240,232,0.45); margin-top: 6px; }
+
+  .update-content {
+    background: var(--cream);
+    padding: 64px 0 100px;
+  }
+
+  .update-card {
+    max-width: 580px;
+    background: var(--warm-white);
+    position: relative;
+    box-shadow: 0 24px 60px rgba(26,26,24,0.07);
+  }
+
+  .update-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(to right, var(--gold), var(--gold-light), var(--gold));
+  }
+
+  .card-inner { padding: 44px 40px 48px; }
+
+  .field-group { margin-bottom: 22px; }
+
+  .field-group label {
+    font-size: 9px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 400;
+  }
+
+  .field-group .field-hint {
+    font-size: 9px;
+    letter-spacing: 1px;
+    color: rgba(122,114,104,0.5);
+    margin-left: 6px;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  .field-group input,
+  .field-group textarea {
+    width: 100%;
+    padding: 13px 16px;
+    background: var(--warm-white);
+    border: 1px solid var(--bone);
+    border-bottom: 2px solid var(--bone);
+    color: var(--charcoal);
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    transition: border-color 0.3s, background 0.2s;
+    border-radius: 0;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    box-sizing: border-box;
+  }
+
+  .field-group input:focus,
+  .field-group textarea:focus {
+    border-bottom-color: var(--gold);
+    background: #fffef9;
+  }
+
+  .field-group input::placeholder,
+  .field-group textarea::placeholder {
+    color: rgba(122,114,104,0.4);
+    font-size: 13px;
+  }
+
+  .field-group textarea { resize: vertical; min-height: 90px; }
+
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .card-actions { display: flex; gap: 12px; margin-top: 10px; flex-wrap: wrap; }
+
+  @media (max-width: 576px) {
+    .card-inner { padding: 32px 22px 40px; }
+    .field-row { grid-template-columns: 1fr; }
+  }
+</style>
+
+<div class="update-hero">
+  <div class="container">
+    <div class="hero-inner">
+      <div class="profile-avatar">{{ user.name|slice:":1" }}</div>
+      <div>
+        <div class="hero-tag">My Account</div>
+        <div class="hero-title">Edit <em>Profile</em></div>
+        <div class="hero-sub">Update your personal information below</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="update-content">
+  <div class="container">
+    <div class="section-label">Account</div>
+    <div class="section-title">Update <em>Details</em></div>
+
+    <div class="update-card">
+      <div class="card-inner">
+        <form method="POST">
+          {% csrf_token %}
+
+          <div class="field-row">
+            <div class="field-group">
+              <label>Full Name</label>
+              <input type="text" name="name"
+                     value="{{ user.name }}"
+                     pattern="^[A-Za-z][A-Za-z .'\-]*[A-Za-z]$"
+                     title="Letters only. Spaces, periods, hyphens, apostrophes allowed."
+                     required>
+            </div>
+            <div class="field-group">
+              <label>Phone Number</label>
+              <input type="text" name="phone_number"
+                     value="{{ user.phone_number }}"
+                     pattern="^\+?[\d\s\-]{7,15}$"
+                     title="Valid phone number required."
+                     inputmode="tel"
+                     required>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label>Email Address</label>
+            <input type="email" name="email"
+                   value="{{ user.email }}"
+                   required>
+          </div>
+
+          <div class="field-group">
+            <label>
+              New Password
+              <span class="field-hint">(leave blank to keep current)</span>
+            </label>
+            <input type="password" name="password" placeholder="••••••••" minlength="6">
+          </div>
+
+          <div class="field-group">
+            <label>Address</label>
+            <textarea name="address" required>{{ user.address }}</textarea>
+          </div>
+
+          <div class="card-actions">
+            <button type="submit" class="btn-gold">
+              <i class="fa fa-check" style="margin-right:8px; font-size:11px;"></i>Save Changes
+            </button>
+            <a href="{% url 'view_profile' %}" class="btn-outline-cream">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

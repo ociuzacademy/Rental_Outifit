@@ -1,0 +1,676 @@
+{% extends 'admin_index.html' %}
+{% block content %}
+
+<style>
+  .orders-hero {
+    background: var(--charcoal);
+    padding: 64px 0 56px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .orders-hero::before {
+    content: 'DRAPE';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 180px;
+    font-weight: 700;
+    color: rgba(201,169,110,0.04);
+    letter-spacing: 30px;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .hero-tag {
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .hero-tag::before {
+    content: '';
+    width: 36px; height: 1px;
+    background: var(--gold);
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(34px, 4vw, 54px);
+    font-weight: 300;
+    color: var(--cream);
+    line-height: 1.1;
+  }
+
+  .hero-title em { font-style: italic; color: var(--gold-light); }
+
+  /* Professional Stats Cards */
+  .stats-container {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .stat-card {
+    background: rgba(245,240,232,0.05);
+    border: 1px solid rgba(201,169,110,0.15);
+    padding: 16px 24px;
+    text-align: center;
+    min-width: 100px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+  }
+
+  .stat-card:hover {
+    background: rgba(201,169,110,0.1);
+    transform: translateY(-2px);
+  }
+
+  .stat-card-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 500;
+    color: var(--gold-light);
+    line-height: 1;
+  }
+
+  .stat-card-label {
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.5);
+    margin-top: 6px;
+    font-weight: 500;
+  }
+
+  .orders-content {
+    background: var(--cream);
+    padding: 64px 0 100px;
+  }
+
+  .section-header {
+    margin-bottom: 32px;
+  }
+
+  .section-label {
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    font-weight: 400;
+    color: var(--charcoal);
+  }
+
+  .section-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  /* Filter Bar */
+  .filter-bar {
+    background: var(--warm-white);
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    border-radius: 12px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+    border: 1px solid var(--bone);
+  }
+
+  .filter-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .filter-buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    padding: 6px 16px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    background: transparent;
+    border: 1px solid var(--bone);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    border-radius: 20px;
+  }
+
+  .filter-btn:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  .filter-btn.active {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--warm-black);
+  }
+
+  /* Orders Table */
+  .orders-table-wrap {
+    background: var(--warm-white);
+    box-shadow: 0 24px 60px rgba(26,26,24,0.07);
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .orders-table-wrap::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(to right, var(--gold), var(--gold-light), var(--gold));
+    z-index: 1;
+  }
+
+  .admin-orders-table { 
+    width: 100%; 
+    border-collapse: collapse;
+  }
+
+  .admin-orders-table thead th {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--bone);
+    font-weight: 600;
+    text-align: left;
+    background: #faf8f6;
+  }
+
+  .admin-orders-table tbody tr {
+    border-bottom: 1px solid var(--bone);
+    transition: background 0.2s;
+  }
+
+  .admin-orders-table tbody tr:last-child { border-bottom: none; }
+  .admin-orders-table tbody tr:hover { background: #fefbf8; }
+
+  .admin-orders-table tbody td {
+    padding: 18px 20px;
+    font-size: 13px;
+    color: var(--charcoal);
+    vertical-align: middle;
+  }
+
+  /* Product Info */
+  .product-info-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .product-thumb {
+    width: 48px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+  }
+
+  .product-details {
+    flex: 1;
+  }
+
+  .outfit-name-cell {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--charcoal);
+    margin-bottom: 2px;
+  }
+
+  .outfit-sub-cell { 
+    font-size: 11px; 
+    color: var(--muted);
+  }
+
+  /* Status Badges */
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .status-paid {
+    background: #e8f5e9;
+    color: #2e7d32;
+  }
+
+  .status-pending {
+    background: #fff3e0;
+    color: #ed6c02;
+  }
+
+  .status-cancelled {
+    background: #ffebee;
+    color: #c62828;
+  }
+
+  /* Customer Info */
+  .customer-name {
+    font-weight: 600;
+    color: var(--charcoal);
+    margin-bottom: 4px;
+  }
+
+  .customer-contact {
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  /* Amount Styles */
+  .amount-paid {
+    color: var(--success);
+    font-weight: 600;
+  }
+
+  .amount-pending {
+    color: var(--warning);
+  }
+
+  .amount-cancelled {
+    color: #9e9e9e;
+    text-decoration: line-through;
+  }
+
+  /* Action Buttons - Professional Alignment */
+  .action-buttons {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: nowrap;
+  }
+
+  .btn-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 7px 14px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: none;
+    white-space: nowrap;
+  }
+
+  .btn-view {
+    background: var(--gold);
+    color: var(--warm-black);
+    border: 1px solid var(--gold);
+  }
+
+  .btn-view:hover {
+    background: var(--gold-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(198, 164, 59, 0.3);
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+  }
+
+  .btn-outline:hover {
+    background: var(--gold);
+    color: var(--warm-black);
+  }
+
+  /* Empty State */
+  .empty-state {
+    padding: 80px 40px;
+    text-align: center;
+  }
+
+  .empty-icon {
+    width: 70px; height: 70px;
+    background: linear-gradient(135deg, #f8f6f4 0%, #f0ece8 100%);
+    border-radius: 50%;
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    margin: 0 auto 24px;
+  }
+
+  .empty-icon i {
+    font-size: 28px;
+    color: var(--gold);
+  }
+
+  .empty-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--charcoal);
+    margin-bottom: 12px;
+  }
+
+  .empty-sub { 
+    font-size: 14px; 
+    color: var(--muted);
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .action-buttons {
+      flex-direction: column;
+    }
+    
+    .btn-action {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .stats-container {
+      width: 100%;
+      justify-content: center;
+    }
+    
+    .admin-orders-table thead {
+      display: none;
+    }
+    
+    .admin-orders-table tbody td {
+      display: block;
+      padding: 12px 16px;
+    }
+    
+    .admin-orders-table tbody td:first-child {
+      padding-top: 20px;
+    }
+    
+    .admin-orders-table tbody td:last-child {
+      padding-bottom: 20px;
+    }
+    
+    .admin-orders-table tbody tr {
+      display: block;
+      margin-bottom: 16px;
+      border: 1px solid var(--bone);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    
+    .action-buttons {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+    
+    .btn-action {
+      flex: 1;
+      min-width: 100px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .stat-card {
+      padding: 12px 16px;
+      min-width: 80px;
+    }
+    
+    .stat-card-num {
+      font-size: 22px;
+    }
+  }
+</style>
+
+<!-- Hero Section -->
+<div class="orders-hero">
+  <div class="container">
+    <div class="hero-inner">
+      <div>
+        <div class="hero-tag">Admin Console</div>
+        <div class="hero-title">All <em>Orders</em></div>
+      </div>
+      <div class="stats-container">
+        <div class="stat-card">
+          <div class="stat-card-num">{{ total_orders }}</div>
+          <div class="stat-card-label">Total Orders</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-num">{{ paid_count|default:0 }}</div>
+          <div class="stat-card-label">Completed</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-num">{{ pending_count|default:0 }}</div>
+          <div class="stat-card-label">Pending</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-num">{{ cancelled_count|default:0 }}</div>
+          <div class="stat-card-label">Cancelled</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Content -->
+<div class="orders-content">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Activity Management</div>
+      <div class="section-title">Booking <em>Records</em></div>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+      <span class="filter-label">Filter by status:</span>
+      <div class="filter-buttons">
+        <button class="filter-btn active" data-status="all">All Orders</button>
+        <button class="filter-btn" data-status="paid">Paid</button>
+        <button class="filter-btn" data-status="pending">Pending</button>
+        <button class="filter-btn" data-status="cancelled">Cancelled</button>
+      </div>
+    </div>
+
+    <div class="orders-table-wrap">
+      {% if orders %}
+      <table class="admin-orders-table" id="ordersTable">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Customer</th>
+            <th>Booking Details</th>
+            <th>Payment Status</th>
+            <th>Amount</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for order in orders %}
+          <tr class="order-row" data-status="{% if order.status == 'cancelled' %}cancelled{% elif order.payment_set.exists %}paid{% else %}pending{% endif %}">
+            
+            <!-- Product Info -->
+            <td>
+              <div class="product-info-cell">
+                {% if order.outfit.image %}
+                  <img class="product-thumb" src="{{ order.outfit.image.url }}" alt="{{ order.outfit.name }}">
+                {% else %}
+                  <div class="product-thumb" style="background: var(--bone);"></div>
+                {% endif %}
+                <div class="product-details">
+                  <div class="outfit-name-cell">{{ order.outfit.name }}</div>
+                  <div class="outfit-sub-cell">{{ order.outfit.category }}</div>
+                </div>
+              </div>
+            </td>
+
+            <!-- Customer Info -->
+            <td>
+              <div class="customer-name">{{ order.name }}</div>
+              <div class="customer-contact">
+                <i class="fa fa-envelope" style="font-size: 10px;"></i> {{ order.email }}<br>
+                <i class="fa fa-phone" style="font-size: 10px;"></i> {{ order.phone_number }}
+              </div>
+            </td>
+            
+            <!-- Booking Details -->
+            <td>
+              <div><strong>Size:</strong> {{ order.size|default:"Standard" }}</div>
+              <div style="font-size: 12px; margin-top: 4px;">
+                <i class="fa fa-calendar"></i> {{ order.booking_date|date:"M d, Y" }}
+              </div>
+              <div style="font-size: 11px; color: var(--muted); margin-top: 4px;">
+                Order #{{ order.id }}
+              </div>
+            </td>
+            
+            <!-- Payment Status -->
+            <td>
+              {% if order.status == "cancelled" %}
+                <span class="status-badge status-cancelled">
+                  <i class="fa fa-times-circle"></i> Cancelled
+                </span>
+              {% elif order.payment_set.exists %}
+                <span class="status-badge status-paid">
+                  <i class="fa fa-check-circle"></i> Paid
+                </span>
+              {% else %}
+                <span class="status-badge status-pending">
+                  <i class="fa fa-clock"></i> Pending
+                </span>
+              {% endif %}
+            </td>
+            
+            <!-- Amount -->
+            <td>
+              {% with payment=order.payment_set.first %}
+                {% if order.status == "cancelled" and payment %}
+                  <div class="amount-cancelled">₹{{ payment.amount }}</div>
+                {% elif payment %}
+                  <div class="amount-paid">₹{{ payment.amount }}</div>
+                  <div style="font-size: 10px; color: var(--success); margin-top: 4px;">
+                    <i class="fa fa-check"></i> Payment completed
+                  </div>
+                {% else %}
+                  <div class="amount-pending">—</div>
+                  <div style="font-size: 10px; color: var(--warning); margin-top: 4px;">
+                    Awaiting payment
+                  </div>
+                {% endif %}
+              {% endwith %}
+            </td>
+            
+            <!-- Actions - Professional Button Group -->
+            <td>
+              <div class="action-buttons">
+                <!-- View Details Button -->
+                <a href="{% url 'view_payment_details' order.id %}" class="btn-action btn-view">
+                  <i class="fa fa-eye"></i> Details
+                </a>
+                
+                <!-- Cancel Status Button -->
+                {% if order.status == "cancelled" %}
+                  <button class="btn-action btn-outline" disabled style="opacity: 0.5; cursor: not-allowed;">
+                    <i class="fa fa-ban"></i> Cancelled
+                  </button>
+                {% else %}
+                  <button class="btn-action btn-outline" 
+                          onclick="cancelBooking('{{ order.id }}')"
+                          style="border-color: #c62828; color: #c62828;">
+                    <i class="fa fa-times"></i> Cancel
+                  </button>
+                {% endif %}
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      {% else %}
+      <div class="empty-state">
+        <div class="empty-icon">
+          <i class="fa fa-inbox"></i>
+        </div>
+        <div class="empty-title">No orders yet</div>
+        <p class="empty-sub">Orders will appear here once customers start booking.</p>
+      </div>
+      {% endif %}
+    </div>
+
+  </div>
+</div>
+
+<script>
+// Filter functionality
+document.querySelectorAll('.filter-btn').forEach(button => {
+  button.addEventListener('click', function() {
+    // Update active state
+    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+    this.classList.add('active');
+    
+    const status = this.getAttribute('data-status');
+    const rows = document.querySelectorAll('.order-row');
+    
+    rows.forEach(row => {
+      if (status === 'all' || row.getAttribute('data-status') === status) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  });
+});
+
+// Cancel booking function
+function cancelBooking(orderId) {
+  if (confirm('Are you sure you want to cancel this booking? This action cannot be undone.')) {
+    window.location.href = `/cancel-booking/${orderId}/`;
+  }
+}
+</script>
+
+{% endblock %}

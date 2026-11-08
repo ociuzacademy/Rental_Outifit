@@ -1,0 +1,66 @@
+{% extends 'admin_index.html' %}
+{% block content %}
+
+<div class="container" style="padding: 60px 0;">
+
+  <div class="section-label">User Management</div>
+  <div class="section-title">Registered <em>Users</em></div>
+
+  <table class="table table-bordered mt-4">
+    <thead style="background:#111; color:#fff;">
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Address</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for user in users %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ user.name }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.phone_number }}</td>
+        <td>{{ user.address }}</td>
+
+        <!-- Status -->
+        <td>
+          {% if user.status == "active" %}
+            <span style="color:green; font-weight:600;">Active</span>
+          {% else %}
+            <span style="color:red; font-weight:600;">Blocked</span>
+          {% endif %}
+        </td>
+
+        <!-- Action -->
+        <td>
+          {% if user.status == "active" %}
+            <a href="{% url 'block_user' user.id %}" 
+               class="btn btn-danger btn-sm">
+               Block
+            </a>
+          {% else %}
+            <a href="{% url 'unblock_user' user.id %}" 
+               class="btn btn-success btn-sm">
+               Unblock
+            </a>
+          {% endif %}
+        </td>
+      </tr>
+
+      {% empty %}
+      <tr>
+        <td colspan="7" style="text-align:center;">No users found</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,258 @@
+{% extends 'user_index.html' %}
+{% block content %}
+
+<style>
+  .feedback-hero {
+    background: var(--charcoal);
+    padding: 64px 0 56px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .feedback-hero::before {
+    content: 'DRAPE';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 180px;
+    font-weight: 700;
+    color: rgba(201,169,110,0.04);
+    letter-spacing: 30px;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  .hero-inner { position: relative; z-index: 2; }
+
+  .hero-tag {
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .hero-tag::before { content: ''; width: 36px; height: 1px; background: var(--gold); }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 4vw, 50px);
+    font-weight: 300;
+    color: var(--cream);
+    line-height: 1.1;
+  }
+
+  .hero-title em { font-style: italic; color: var(--gold-light); }
+  .hero-sub { font-size: 13px; color: rgba(245,240,232,0.45); margin-top: 8px; }
+
+  .feedback-content {
+    background: var(--cream);
+    padding: 64px 0 100px;
+  }
+
+  .feedback-card {
+    max-width: 560px;
+    background: var(--warm-white);
+    position: relative;
+    box-shadow: 0 24px 60px rgba(26,26,24,0.08);
+  }
+
+  .feedback-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(to right, var(--gold), var(--gold-light), var(--gold));
+  }
+
+  .card-inner { padding: 44px 40px 48px; }
+
+  /* Outfit pill */
+  .outfit-pill {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--cream);
+    padding: 14px 18px;
+    margin-bottom: 32px;
+  }
+
+  .outfit-pill i { color: var(--gold); font-size: 16px; flex-shrink: 0; }
+
+  .outfit-pill-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    color: var(--charcoal);
+  }
+
+  .outfit-pill-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  /* Star rating */
+  .star-group { margin-bottom: 26px; }
+
+  .star-label {
+    font-size: 9px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 12px;
+    font-weight: 400;
+  }
+
+  .stars { display: flex; gap: 6px; }
+
+  .star-btn {
+    width: 44px; height: 44px;
+    border: 1px solid var(--bone);
+    background: var(--warm-white);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    color: var(--bone);
+    font-size: 18px;
+  }
+
+  .star-btn.active {
+    background: var(--charcoal);
+    border-color: var(--charcoal);
+    color: var(--gold);
+  }
+
+  .star-btn:hover { background: var(--charcoal); border-color: var(--charcoal); color: var(--gold); }
+
+  /* Fields */
+  .field-group { margin-bottom: 22px; }
+
+  .field-group label {
+    font-size: 9px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 400;
+  }
+
+  .field-hint { color: rgba(122,114,104,0.45); font-size: 9px; letter-spacing: 0; text-transform: none; }
+
+  .field-group textarea {
+    width: 100%;
+    padding: 13px 16px;
+    background: var(--warm-white);
+    border: 1px solid var(--bone);
+    border-bottom: 2px solid var(--bone);
+    color: var(--charcoal);
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    transition: border-color 0.3s, background 0.2s;
+    border-radius: 0;
+    resize: vertical;
+    min-height: 100px;
+    box-sizing: border-box;
+  }
+
+  .field-group textarea:focus { border-bottom-color: var(--gold); background: #fffef9; }
+  .field-group textarea::placeholder { color: rgba(122,114,104,0.4); font-size: 13px; }
+
+  .card-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
+
+  @media (max-width: 576px) {
+    .card-inner { padding: 32px 22px 40px; }
+    .star-btn { width: 38px; height: 38px; font-size: 16px; }
+  }
+</style>
+
+<div class="feedback-hero">
+  <div class="container">
+    <div class="hero-inner">
+      <div class="hero-tag">My Account</div>
+      <div class="hero-title">Leave a <em>Review</em></div>
+      <div class="hero-sub">Share your experience with this outfit</div>
+    </div>
+  </div>
+</div>
+
+<div class="feedback-content">
+  <div class="container">
+    <div class="section-label">Feedback</div>
+    <div class="section-title">Rate Your <em>Experience</em></div>
+
+    <div class="feedback-card">
+      <div class="card-inner">
+
+        <div class="outfit-pill">
+          <i class="fa fa-shirt"></i>
+          <div>
+            <div class="outfit-pill-name">{{ booking.outfit.name }}</div>
+            <div class="outfit-pill-sub">Booked on {{ booking.booking_date|date:"M d, Y" }}</div>
+          </div>
+        </div>
+
+        <form method="POST">
+          {% csrf_token %}
+          <input type="hidden" name="rating" id="rating_input" value="">
+
+          <div class="star-group">
+            <span class="star-label">Your Rating</span>
+            <div class="stars" id="stars">
+              {% for i in "12345" %}
+              <div class="star-btn" data-value="{{ forloop.counter }}">
+                <i class="fa fa-star"></i>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label>
+              Your Review
+              <span class="field-hint">(optional)</span>
+            </label>
+            <textarea name="comment"
+                      placeholder="Tell us what you thought about the outfit, fit, and overall experience…"
+                      maxlength="1000"></textarea>
+          </div>
+
+          <div class="card-actions">
+            <button type="submit" class="btn-gold">
+              <i class="fa fa-paper-plane" style="margin-right:8px; font-size:11px;"></i>Submit Review
+            </button>
+            <a href="{% url 'my_orders' %}" class="btn-outline-cream">Cancel</a>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const starBtns = document.querySelectorAll('.star-btn');
+  const ratingInput = document.getElementById('rating_input');
+
+  starBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const val = parseInt(btn.dataset.value);
+      ratingInput.value = val;
+      starBtns.forEach(b => {
+        b.classList.toggle('active', parseInt(b.dataset.value) <= val);
+      });
+    });
+  });
+
+  // Prevent submit if no star selected
+  document.querySelector('form').addEventListener('submit', function(e) {
+    if (!ratingInput.value) {
+      e.preventDefault();
+      alert('Please select a star rating before submitting.');
+    }
+  });
+</script>
+
+{% endblock %}

@@ -1,0 +1,204 @@
+{% extends 'user_index.html' %}
+{% block content %}
+
+<style>
+  .profile-hero {
+    background: var(--charcoal);
+    padding: 64px 0 56px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .profile-hero::before {
+    content: 'DRAPE';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 180px;
+    font-weight: 700;
+    color: rgba(201,169,110,0.04);
+    letter-spacing: 30px;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
+
+  .profile-avatar {
+    width: 76px; height: 76px;
+    border: 1px solid rgba(201,169,110,0.35);
+    border-radius: 50%;
+    background: rgba(201,169,110,0.08);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 300;
+    color: var(--gold-light);
+    flex-shrink: 0;
+  }
+
+  .hero-tag {
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .hero-tag::before { content: ''; width: 30px; height: 1px; background: var(--gold); }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 4vw, 50px);
+    font-weight: 300;
+    color: var(--cream);
+    line-height: 1.1;
+  }
+
+  .hero-title em { font-style: italic; color: var(--gold-light); }
+  .hero-sub { font-size: 13px; color: rgba(245,240,232,0.45); margin-top: 6px; }
+
+  .profile-content {
+    background: var(--cream);
+    padding: 64px 0 100px;
+  }
+
+  .profile-card {
+    max-width: 600px;
+    background: var(--warm-white);
+    position: relative;
+    box-shadow: 0 24px 60px rgba(26,26,24,0.07);
+  }
+
+  .profile-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(to right, var(--gold), var(--gold-light), var(--gold));
+  }
+
+  .card-inner { padding: 44px 40px 48px; }
+
+  .detail-block { margin-bottom: 28px; }
+
+  .block-header {
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--bone);
+    display: flex; align-items: center; gap: 10px;
+  }
+
+  .block-header i { font-size: 12px; }
+
+  .detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(237,231,217,0.6);
+    gap: 24px;
+  }
+
+  .detail-row:last-child { border-bottom: none; }
+
+  .detail-key {
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+
+  .detail-val {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    color: var(--charcoal);
+    text-align: right;
+  }
+
+  .detail-val.sm {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+  }
+
+  .card-actions { display: flex; gap: 12px; margin-top: 8px; flex-wrap: wrap; }
+</style>
+
+{% with initials=user.name|slice:":1" %}
+<div class="profile-hero">
+  <div class="container">
+    <div class="hero-inner">
+      <div class="profile-avatar">{{ initials }}</div>
+      <div>
+        <div class="hero-tag">My Account</div>
+        <div class="hero-title"> <em>{{ user.name|truncatewords_html:1 }}</em></div>
+        <div class="hero-sub">{{ user.email }} &nbsp;·&nbsp; Member</div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endwith %}
+
+<div class="profile-content">
+  <div class="container">
+    <div class="section-label">Account</div>
+    <div class="section-title">Profile <em>Details</em></div>
+
+    <div class="profile-card">
+      <div class="card-inner">
+
+        <div class="detail-block">
+          <div class="block-header"><i class="fa fa-user"></i> Personal Info</div>
+          <div class="detail-row">
+            <div class="detail-key">Name</div>
+            <div class="detail-val">{{ user.name }}</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-key">Email</div>
+            <div class="detail-val sm">{{ user.email }}</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-key">Phone</div>
+            <div class="detail-val sm">{{ user.phone_number }}</div>
+          </div>
+        </div>
+
+        <div class="detail-block">
+          <div class="block-header"><i class="fa fa-location-dot"></i> Address</div>
+          <div class="detail-row">
+            <div class="detail-key">Address</div>
+            <div class="detail-val sm" style="text-align:right; line-height:1.6;">
+              {{ user.address|default:"Not provided"|linebreaksbr }}
+            </div>
+          </div>
+        </div>
+
+        <div class="card-actions">
+          <a href="{% url 'update_profile' %}" class="btn-gold">
+            <i class="fa fa-pen" style="margin-right:8px; font-size:11px;"></i>Edit Profile
+          </a>
+          <a href="{% url 'my_orders' %}" class="btn-outline-cream">My Orders</a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

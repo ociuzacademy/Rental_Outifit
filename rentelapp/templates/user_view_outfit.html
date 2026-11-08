@@ -1,0 +1,474 @@
+{% extends 'user_index.html' %}
+{% block content %}
+
+<style>
+/* Override / extend styles to match the main design */
+.outfit-collection-section {
+    padding: 80px 0 100px;
+    background: var(--cream);
+}
+
+.outfit-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 56px;
+}
+
+.outfit-card {
+    background: var(--warm-white);
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    position: relative;
+}
+
+.outfit-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 24px 60px rgba(26,26,24,0.12);
+}
+
+.outfit-img {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 3/4;
+}
+
+.outfit-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+    filter: brightness(0.92);
+}
+
+.outfit-card:hover .outfit-img img {
+    transform: scale(1.04);
+}
+
+.outfit-badge {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    background: var(--charcoal);
+    color: var(--gold);
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    z-index: 2;
+}
+
+.outfit-badge.available {
+    background: #2D5016;
+    color: #A8D57A;
+}
+
+.outfit-badge.limited {
+    background: #4A2800;
+    color: #E09650;
+}
+
+.outfit-quick-book {
+    position: absolute;
+    bottom: -60px;
+    left: 0;
+    right: 0;
+    background: var(--gold);
+    color: var(--warm-black);
+    text-align: center;
+    padding: 14px;
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    width: 100%;
+    text-decoration: none !important;
+    display: block;
+    z-index: 2;
+}
+
+.outfit-card:hover .outfit-quick-book {
+    bottom: 0;
+}
+
+.outfit-info {
+    padding: 20px 20px 24px;
+    border-top: 1px solid var(--bone);
+}
+
+.outfit-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.outfit-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--charcoal);
+    margin-bottom: 4px;
+}
+
+.outfit-designer {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 1px;
+}
+
+.outfit-price {
+    text-align: right;
+}
+
+.price-per-day {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    color: var(--charcoal);
+    font-weight: 600;
+}
+
+.price-label {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 1px;
+}
+
+.outfit-sizes {
+    margin-top: 12px;
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.size-dot {
+    width: 26px;
+    height: 26px;
+    border: 1px solid var(--bone);
+    font-size: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    transition: all 0.2s;
+    cursor: pointer;
+    background: white;
+}
+
+.size-dot:hover, .size-dot.active {
+    border-color: var(--charcoal);
+    background: var(--charcoal);
+    color: var(--cream);
+}
+
+.size-outofstock {
+    width: 26px;
+    height: 26px;
+    border: 1px solid rgba(122,114,104,0.2);
+    font-size: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(122,114,104,0.4);
+    background: #f4f0ea;
+    cursor: not-allowed;
+    text-decoration: line-through;
+}
+
+/* search + filter bar */
+.collection-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 48px;
+    padding: 0 0 20px 0;
+    border-bottom: 1px solid var(--bone);
+}
+
+.search-box {
+    display: flex;
+    max-width: 360px;
+    width: 100%;
+}
+
+.search-box input {
+    flex: 1;
+    padding: 12px 16px;
+    border: 1px solid var(--bone);
+    outline: none;
+    font-size: 12px;
+    background: var(--warm-white);
+    font-family: 'DM Sans', sans-serif;
+}
+
+.search-box button {
+    padding: 12px 24px;
+    background: var(--gold);
+    border: none;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.2s;
+}
+
+.search-box button:hover {
+    background: var(--gold-light);
+}
+
+.filter-tabs {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.filter-tab {
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 8px 18px;
+    background: transparent;
+    border: 1px solid var(--bone);
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.filter-tab.active, .filter-tab:hover {
+    background: var(--charcoal);
+    border-color: var(--charcoal);
+    color: var(--cream);
+    text-decoration: none;
+}
+
+/* empty state */
+.empty-collection {
+    text-align: center;
+    padding: 80px 20px;
+    background: var(--warm-white);
+    border: 1px solid var(--bone);
+}
+
+.empty-collection p {
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 24px;
+}
+
+/* wishlist heart styling - refined */
+.wishlist-heart {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 10;
+    background: rgba(26,26,24,0.65);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+    transition: all 0.25s ease;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.wishlist-heart:hover {
+    background: rgba(26,26,24,0.9);
+    transform: scale(1.05);
+}
+
+.wishlist-heart .heart-icon {
+    transition: transform 0.2s;
+    display: inline-block;
+    line-height: 1;
+}
+
+.wishlist-heart:hover .heart-icon {
+    transform: scale(1.1);
+}
+
+/* responsiveness */
+@media (max-width: 991px) {
+    .outfit-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 576px) {
+    .outfit-grid {
+        grid-template-columns: 1fr;
+    }
+    .collection-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .search-box {
+        max-width: 100%;
+    }
+}
+</style>
+
+<div class="outfit-collection-section">
+    <div class="container">
+
+        <div class="section-label" style="justify-content: center;">Explore</div>
+        <div class="section-title" style="text-align: center; margin-bottom: 12px;">The <em>Collection</em></div>
+        <p class="section-sub" style="text-align: center; margin: 0 auto 48px;">From weddings to weekend getaways — find the outfit that tells your story.</p>
+
+        <!-- search + filter bar (matches design language) -->
+        <div class="collection-toolbar">
+            <form method="GET" class="search-box">
+                <input type="text" name="search" placeholder="Search by name, designer, or style..." value="{{ request.GET.search }}">
+                <button type="submit">Search</button>
+            </form>
+
+            <div class="filter-tabs">
+                <a href="{% url 'user_view_outfit' %}" class="filter-tab {% if not request.GET.category %}active{% endif %}">All</a>
+                {% for cat in categories %}
+                <a href="?category={{ cat.id }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}" 
+                   class="filter-tab {% if request.GET.category|add:0 == cat.id %}active{% endif %}">
+                    {{ cat.name }}
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- outfit grid -->
+        {% if outfits %}
+        <div class="outfit-grid">
+            {% for outfit in outfits %}
+            <div class="outfit-card">
+                <!-- WISHLIST HEART (refined, integrated into design) -->
+                <a href="{% url 'toggle_wishlist' outfit.id %}?next={{ request.get_full_path|urlencode }}" 
+                   class="wishlist-heart" 
+                   title="{% if outfit.id in wishlist_ids %}Remove from wishlist{% else %}Add to wishlist{% endif %}">
+                    {% if outfit.id in wishlist_ids %}
+                        <span class="heart-icon" style="color: #E63535;">♥</span>
+                    {% else %}
+                        <span class="heart-icon" style="color: rgba(245,240,232,0.9);">♡</span>
+                    {% endif %}
+                </a>
+
+                <div class="outfit-img">
+                    {% if outfit.image %}
+                        <img src="{{ outfit.image.url }}" alt="{{ outfit.name }}">
+                    {% else %}
+                        <img src="https://via.placeholder.com/500x600?text=DRAPE+Outfit" alt="placeholder">
+                    {% endif %}
+                    
+                    <!-- stock badge based on availability -->
+                    {% if outfit.is_available %}
+                        {% if outfit.total_quantity <= 2 and outfit.total_quantity > 0 %}
+                        <span class="outfit-badge limited">Only {{ outfit.total_quantity }} left</span>
+                        {% else %}
+                        <span class="outfit-badge available">Available</span>
+                        {% endif %}
+                    {% else %}
+                        <span class="outfit-badge" style="background:#3A2C1F; color:#B09B7A;">Out of Stock</span>
+                    {% endif %}
+
+                    <!-- quick book / rent now (only if available) -->
+                    {% if outfit.is_available %}
+                    <form method="GET" action="{% url 'book_outfit' outfit.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="outfit-quick-book">Rent Now →</button>
+                    </form>
+                    {% else %}
+                    <button class="outfit-quick-book" style="background: #7A7268; cursor: not-allowed;" disabled>Unavailable</button>
+                    {% endif %}
+                </div>
+
+                <div class="outfit-info">
+                    <div class="outfit-meta">
+                        <div>
+                            <div class="outfit-name">{{ outfit.name }}</div>
+                            <div class="outfit-designer">
+                                {% if outfit.designer %}{{ outfit.designer }}{% else %}DRAPE Exclusive{% endif %}
+                            </div>
+                        </div>
+                        <div class="outfit-price">
+                            <div class="price-per-day">₹{{ outfit.price }}</div>
+                            <div class="price-label">per day</div>
+                        </div>
+                    </div>
+
+                    <!-- sizes with quantity indicator (matches interactive style from main page) -->
+                    <div class="outfit-sizes">
+                        {% for size_item in outfit.sizes.all %}
+                            {% if size_item.quantity > 0 %}
+                                <div class="size-dot" title="{{ size_item.quantity }} available">{{ size_item.size }}</div>
+                            {% else %}
+                                <div class="size-outofstock" title="Out of stock">{{ size_item.size }}</div>
+                            {% endif %}
+                        {% empty %}
+                            <span style="font-size:10px; color:var(--muted);">No sizes listed</span>
+                        {% endfor %}
+                    </div>
+
+                    <!-- extra subtle details (category & extra action) -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px;">
+                        <span style="font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: var(--gold);">
+                            {{ outfit.category.name|default:"Uncategorized" }}
+                        </span>
+                        <a href="{% url 'user_view_outfit_details' outfit.id %}" 
+                           style="font-size: 9px; letter-spacing: 1.5px; color: var(--muted); text-decoration: none; border-bottom: 1px dotted var(--muted);">
+                            View Details →
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-collection">
+            <p style="font-family: 'Cormorant Garamond', serif; font-size: 24px;">No outfits found</p>
+            <p>Try adjusting your search or browse our full collection.</p>
+            <a href="{% url 'user_view_outfit' %}" class="btn-gold" style="display: inline-block; margin-top: 8px;">Clear Filters</a>
+        </div>
+        {% endif %}
+
+        <!-- pagination -->
+        {% if is_paginated %}
+        <div style="display: flex; justify-content: center; gap: 12px; margin-top: 60px; flex-wrap: wrap;">
+            {% if page_obj.has_previous %}
+                <a href="?page=1{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}" class="btn-outline-cream" style="padding: 8px 18px; text-decoration: none;">First</a>
+                <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}" class="btn-outline-cream" style="padding: 8px 18px; text-decoration: none;">← Prev</a>
+            {% endif %}
+            <span style="padding: 8px 18px; background: var(--charcoal); color: var(--cream); font-size:12px; border-radius: 2px;">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}" class="btn-outline-cream" style="padding: 8px 18px; text-decoration: none;">Next →</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}" class="btn-outline-cream" style="padding: 8px 18px; text-decoration: none;">Last</a>
+            {% endif %}
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+
+<script>
+    // Keep active size selection style consistent
+    document.querySelectorAll('.size-dot').forEach(dot => {
+        dot.addEventListener('click', function(e) {
+            if(this.classList.contains('size-outofstock')) return;
+            const container = this.closest('.outfit-sizes');
+            if(container) {
+                container.querySelectorAll('.size-dot').forEach(d => d.classList.remove('active'));
+                this.classList.add('active');
+            }
+        });
+    });
+</script>
+
+{% endblock %}

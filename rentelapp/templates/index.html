@@ -1,0 +1,1159 @@
+<!-- #Index.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Rent premium outfits for any occasion">
+  <meta name="author" content="">
+  <link href="https://fonts.googleapis.com/css?family=Cormorant+Garamond:300,400,500,600,700|DM+Sans:300,400,500&display=swap" rel="stylesheet">
+
+  <title>DRAPE — Outfit Rental</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- Bootstrap core CSS -->
+  <link href="/static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Additional CSS Files -->
+  <link rel="stylesheet" href="/static/assets/css/fontawesome.css">
+  <link rel="stylesheet" href="/static/assets/css/owl.css">
+
+  <style>
+    :root {
+      --cream: #F5F0E8;
+      --bone: #EDE7D9;
+      --charcoal: #1A1A18;
+      --warm-black: #111110;
+      --gold: #C9A96E;
+      --gold-light: #E2C99A;
+      --muted: #7A7268;
+      --warm-white: #FDFAF5;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--warm-white);
+      color: var(--charcoal);
+      overflow-x: hidden;
+    }
+
+    /* ── PRE-HEADER ── */
+    #pre-header {
+      background: var(--charcoal);
+      color: var(--gold-light);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      text-align: center;
+      padding: 10px 0;
+    }
+
+    /* ── NAVBAR ── */
+    .navbar {
+      background: var(--warm-black) !important;
+      padding: 20px 0;
+      border-bottom: 1px solid rgba(201,169,110,0.2);
+    }
+
+    .navbar-brand img { height: 36px; }
+
+    .navbar-brand span {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      font-weight: 300;
+      letter-spacing: 6px;
+      color: var(--cream);
+      text-transform: uppercase;
+    }
+
+    .nav-link {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.7) !important;
+      margin: 0 12px;
+      transition: color 0.3s;
+      padding: 6px 0 !important;
+      position: relative;
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 0; height: 1px;
+      background: var(--gold);
+      transition: width 0.3s;
+    }
+
+    .nav-link:hover { color: var(--gold) !important; }
+    .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+    .nav-link.active { color: var(--gold) !important; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 92vh;
+      background: var(--charcoal);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px 60px 80px 80px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-tag {
+      font-size: 10px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .hero-tag::before {
+      content: '';
+      width: 40px; height: 1px;
+      background: var(--gold);
+    }
+
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(52px, 6vw, 88px);
+      font-weight: 300;
+      line-height: 1.05;
+      color: var(--cream);
+      margin-bottom: 28px;
+      letter-spacing: -1px;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--gold-light);
+    }
+
+    .hero p {
+      font-size: 15px;
+      line-height: 1.8;
+      color: rgba(245,240,232,0.6);
+      max-width: 400px;
+      margin-bottom: 48px;
+    }
+
+    .hero-actions { display: flex; gap: 16px; align-items: center; }
+
+    .btn-gold {
+      background: var(--gold);
+      color: var(--warm-black);
+      font-size: 11px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      padding: 16px 36px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+    }
+
+    .btn-gold:hover {
+      background: var(--gold-light);
+      color: var(--warm-black);
+      text-decoration: none;
+      transform: translateY(-2px);
+    }
+
+    .btn-outline-cream {
+      background: transparent;
+      color: var(--cream);
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 15px 32px;
+      border: 1px solid rgba(245,240,232,0.3);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .btn-outline-cream:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+      text-decoration: none;
+    }
+
+    .hero-right {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-image-grid {
+      display: grid;
+      grid-template-rows: 1fr 1fr;
+      grid-template-columns: 1fr 1fr;
+      height: 100%;
+      gap: 3px;
+    }
+
+    .hero-img-block {
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero-img-block img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      filter: brightness(0.75) saturate(0.85);
+      transition: transform 0.7s ease, filter 0.4s;
+    }
+
+    .hero-img-block:hover img {
+      transform: scale(1.06);
+      filter: brightness(0.85) saturate(1);
+    }
+
+    .hero-img-block.tall { grid-row: span 2; }
+
+    .hero-stat {
+      position: absolute;
+      bottom: 24px; left: 24px;
+      background: rgba(17,17,16,0.85);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(201,169,110,0.3);
+      padding: 14px 20px;
+    }
+
+    .hero-stat .num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 32px;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .hero-stat .lbl {
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.5);
+    }
+
+    /* ── CATEGORIES ── */
+    .categories-section {
+      padding: 100px 0 80px;
+      background: var(--warm-white);
+    }
+
+    .section-label {
+      font-size: 10px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .section-label::before {
+      content: '';
+      width: 30px; height: 1px;
+      background: var(--gold);
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(36px, 4vw, 56px);
+      font-weight: 300;
+      color: var(--charcoal);
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+
+    .section-title em { font-style: italic; color: var(--muted); }
+
+    .section-sub {
+      font-size: 14px;
+      color: var(--muted);
+      max-width: 480px;
+      line-height: 1.7;
+      margin-bottom: 56px;
+    }
+
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+    }
+
+    .category-card {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      aspect-ratio: 3/4;
+    }
+
+    .category-card img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+      filter: brightness(0.65);
+    }
+
+    .category-card:hover img {
+      transform: scale(1.07);
+      filter: brightness(0.75);
+    }
+
+    .category-info {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 28px 24px;
+      background: linear-gradient(to top, rgba(17,17,16,0.9) 0%, transparent 100%);
+    }
+
+    .category-tag {
+      font-size: 9px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+
+    .category-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      font-weight: 400;
+      color: var(--cream);
+      margin-bottom: 4px;
+    }
+
+    .category-count {
+      font-size: 11px;
+      color: rgba(245,240,232,0.5);
+    }
+
+    /* ── FEATURED OUTFITS ── */
+    .featured-section {
+      padding: 80px 0 100px;
+      background: var(--cream);
+    }
+
+    .outfit-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 56px;
+    }
+
+    .outfit-card {
+      background: var(--warm-white);
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+      position: relative;
+    }
+
+    .outfit-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 24px 60px rgba(26,26,24,0.12);
+    }
+
+    .outfit-img {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 3/4;
+    }
+
+    .outfit-img img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+      filter: brightness(0.92);
+    }
+
+    .outfit-card:hover .outfit-img img { transform: scale(1.04); }
+
+    .outfit-badge {
+      position: absolute;
+      top: 16px; left: 16px;
+      background: var(--charcoal);
+      color: var(--gold);
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 6px 12px;
+    }
+
+    .outfit-badge.available {
+      background: #2D5016;
+      color: #A8D57A;
+    }
+
+    .outfit-badge.limited {
+      background: #4A2800;
+      color: #E09650;
+    }
+
+    .outfit-quick-book {
+      position: absolute;
+      bottom: -50px; left: 0; right: 0;
+      background: var(--gold);
+      color: var(--warm-black);
+      text-align: center;
+      padding: 14px;
+      font-size: 10px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      font-weight: 500;
+      transition: bottom 0.3s ease;
+      cursor: pointer;
+      border: none;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .outfit-card:hover .outfit-quick-book { bottom: 0; }
+
+    .outfit-info {
+      padding: 20px 20px 24px;
+      border-top: 1px solid var(--bone);
+    }
+
+    .outfit-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .outfit-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--charcoal);
+      margin-bottom: 4px;
+    }
+
+    .outfit-designer {
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 1px;
+    }
+
+    .outfit-price { text-align: right; }
+
+    .price-per-day {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      color: var(--charcoal);
+      font-weight: 600;
+    }
+
+    .price-label {
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 1px;
+    }
+
+    .outfit-sizes {
+      margin-top: 12px;
+      display: flex;
+      gap: 6px;
+    }
+
+    .size-dot {
+      width: 26px; height: 26px;
+      border: 1px solid var(--bone);
+      font-size: 9px;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .size-dot:hover, .size-dot.active {
+      border-color: var(--charcoal);
+      background: var(--charcoal);
+      color: var(--cream);
+    }
+
+    /* ── HOW IT WORKS ── */
+    .how-section {
+      padding: 100px 0;
+      background: var(--charcoal);
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 40px;
+      margin-top: 70px;
+      position: relative;
+    }
+
+    .steps-grid::before {
+      content: '';
+      position: absolute;
+      top: 32px; left: 10%; right: 10%;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold), var(--gold), transparent);
+      opacity: 0.3;
+    }
+
+    .step-card { text-align: center; position: relative; }
+
+    .step-num {
+      width: 64px; height: 64px;
+      border: 1px solid rgba(201,169,110,0.4);
+      margin: 0 auto 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      color: var(--gold);
+      position: relative;
+      background: var(--charcoal);
+    }
+
+    .step-icon {
+      font-size: 22px;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .step-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      color: var(--cream);
+      margin-bottom: 12px;
+      font-weight: 400;
+    }
+
+    .step-desc {
+      font-size: 13px;
+      color: rgba(245,240,232,0.45);
+      line-height: 1.7;
+    }
+
+    /* ── TESTIMONIAL ── */
+    .testimonial-section {
+      padding: 100px 0;
+      background: var(--bone);
+      text-align: center;
+    }
+
+    .testimonial-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(26px, 3vw, 42px);
+      font-weight: 300;
+      font-style: italic;
+      color: var(--charcoal);
+      max-width: 700px;
+      margin: 0 auto 28px;
+      line-height: 1.5;
+    }
+
+    .testimonial-author {
+      font-size: 11px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .testimonial-divider {
+      width: 40px; height: 1px;
+      background: var(--gold);
+      margin: 20px auto;
+    }
+
+    /* ── SUBSCRIBE ── */
+    .subscribe-section {
+      padding: 90px 0;
+      background: var(--warm-black);
+    }
+
+    .subscribe-inner {
+      max-width: 540px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .subscribe-section .section-label { justify-content: center; }
+    .subscribe-section .section-label::before { display: none; }
+
+    .subscribe-section .section-title { color: var(--cream); margin: 0 auto 12px; }
+
+    .subscribe-section .section-sub {
+      color: rgba(245,240,232,0.45);
+      margin: 0 auto 40px;
+    }
+
+    .subscribe-form-row {
+      display: flex;
+      gap: 0;
+    }
+
+    .subscribe-input {
+      flex: 1;
+      background: rgba(245,240,232,0.07);
+      border: 1px solid rgba(201,169,110,0.3);
+      border-right: none;
+      color: var(--cream);
+      padding: 16px 22px;
+      font-size: 13px;
+      font-family: 'DM Sans', sans-serif;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .subscribe-input:focus { border-color: var(--gold); }
+    .subscribe-input::placeholder { color: rgba(245,240,232,0.3); }
+
+    .subscribe-btn {
+      background: var(--gold);
+      color: var(--warm-black);
+      border: none;
+      padding: 16px 28px;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.3s;
+      white-space: nowrap;
+    }
+
+    .subscribe-btn:hover { background: var(--gold-light); }
+
+    /* ── FOOTER ── */
+    .footer {
+      background: #0D0D0C;
+      padding: 60px 0 40px;
+      border-top: 1px solid rgba(201,169,110,0.12);
+    }
+
+    .footer-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px;
+      font-weight: 300;
+      letter-spacing: 6px;
+      color: var(--cream);
+      text-transform: uppercase;
+      margin-bottom: 32px;
+      text-align: center;
+    }
+
+    .footer-menu {
+      display: flex;
+      justify-content: center;
+      gap: 36px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+
+    .footer-menu a {
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.4);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer-menu a:hover { color: var(--gold); }
+
+    .footer-social {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+    }
+
+    .footer-social a {
+      width: 36px; height: 36px;
+      border: 1px solid rgba(201,169,110,0.2);
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(245,240,232,0.4);
+      text-decoration: none;
+      font-size: 13px;
+      transition: all 0.3s;
+    }
+
+    .footer-social a:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .sub-footer {
+      background: #0D0D0C;
+      text-align: center;
+      padding: 20px 0;
+      border-top: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .sub-footer p {
+      font-size: 11px;
+      color: rgba(245,240,232,0.2);
+      letter-spacing: 1px;
+    }
+
+    .sub-footer a { color: rgba(201,169,110,0.5); text-decoration: none; }
+    .sub-footer a:hover { color: var(--gold); }
+
+    /* RESPONSIVE */
+    @media (max-width: 991px) {
+      .hero { grid-template-columns: 1fr; min-height: auto; }
+      .hero-right { height: 50vw; }
+      .hero-left { padding: 60px 40px; }
+      .category-grid { grid-template-columns: repeat(2, 1fr); }
+      .outfit-grid { grid-template-columns: repeat(2, 1fr); }
+      .steps-grid { grid-template-columns: repeat(2, 1fr); }
+      .steps-grid::before { display: none; }
+    }
+
+    @media (max-width: 576px) {
+      .category-grid { grid-template-columns: 1fr 1fr; }
+      .outfit-grid { grid-template-columns: 1fr; }
+      .hero-left { padding: 48px 24px; }
+      .subscribe-form-row { flex-direction: column; }
+      .subscribe-input { border-right: 1px solid rgba(201,169,110,0.3); border-bottom: none; }
+    }
+
+    /* Animations */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-left > * {
+      animation: fadeUp 0.9s ease forwards;
+      opacity: 0;
+    }
+
+    .hero-left > *:nth-child(1) { animation-delay: 0.1s; }
+    .hero-left > *:nth-child(2) { animation-delay: 0.25s; }
+    .hero-left > *:nth-child(3) { animation-delay: 0.4s; }
+    .hero-left > *:nth-child(4) { animation-delay: 0.55s; }
+  </style>
+</head>
+
+<body>
+
+  <!-- Pre Header -->
+  <div id="pre-header">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <span>Free delivery on rentals above ₹2000 &nbsp;·&nbsp; Dry-cleaning included &nbsp;·&nbsp; Return in 3 days</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+    <div class="container">
+      <a class="navbar-brand" href="{% url 'index' %}">
+        <span>DRAPE</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+        aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="{% url 'index' %}">Home <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'about' %}">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'register' %}">Registration</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}">Login</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  {% block content %}
+
+  <!-- ── HERO ── -->
+  <div class="hero">
+    <div class="hero-left">
+      <div class="hero-tag">Curated Outfit Rentals</div>
+      <h1>Dress for the <em>Moment,</em> Not Forever</h1>
+      <p>Premium designer outfits for weddings, parties, and every occasion. Rent, wear, return — effortlessly.</p>
+      <div class="hero-actions">
+        <a href="{% url 'login' %}" class="btn-gold">Browse Outfits</a>
+        <a href="{% url 'about' %}" class="btn-outline-cream">How It Works</a>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="hero-image-grid">
+        <!-- Using placeholder images; replace with your actual outfit images -->
+        <div class="hero-img-block tall">
+          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" alt="Designer Gown">
+        </div>
+        <div class="hero-img-block">
+          <img src="https://images.unsplash.com/photo-1581044777550-4cfa60707c03?w=400&q=80" alt="Traditional Wear">
+        </div>
+        <div class="hero-img-block">
+          <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&q=80" alt="Party Outfit">
+          <div class="hero-stat">
+            <div class="num">500+</div>
+            <div class="lbl">Curated Outfits</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CATEGORIES ── -->
+  <div class="categories-section">
+    <div class="container">
+      <div class="section-label">Shop by Occasion</div>
+      <div class="section-title">Find Your <em>Perfect Look</em></div>
+      <p class="section-sub">From grand weddings to intimate evenings — every occasion deserves an outfit as unique as the memory you'll create.</p>
+
+      <div class="category-grid">
+        <div class="category-card">
+          <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=500&q=80" alt="Wedding">
+          <div class="category-info">
+            <div class="category-tag">Collection</div>
+            <div class="category-name">Wedding</div>
+            <div class="category-count">48 outfits available</div>
+          </div>
+        </div>
+        <div class="category-card">
+          <img src="/static/assets/images/o1.avif" alt="Party & Night Out">
+          <div class="category-info">
+            <div class="category-tag">Collection</div>
+            <div class="category-name">Party & Night Out</div>
+            <div class="category-count">62 outfits available</div>
+          </div>
+        </div>
+        <div class="category-card">
+          <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=500&q=80" alt="Traditional">
+          <div class="category-info">
+            <div class="category-tag">Collection</div>
+            <div class="category-name">Traditional</div>
+            <div class="category-count">74 outfits available</div>
+          </div>
+        </div>
+        <div class="category-card">
+          <img src="/static/assets/images/02.png" alt="Formal">
+          <div class="category-info">
+            <div class="category-tag">Collection</div>
+            <div class="category-name">Formal & Corporate</div>
+            <div class="category-count">35 outfits available</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── FEATURED OUTFITS ── -->
+  <div class="featured-section" id="featured">
+    <div class="container">
+      <div class="section-label">New Arrivals</div>
+      <div class="section-title">Featured <em>Outfits</em></div>
+      <p class="section-sub">Handpicked pieces from top designers. Available for 1–7 day rentals.</p>
+
+      <div class="outfit-grid">
+
+        <!-- Card 1 -->
+        <div class="outfit-card">
+          <div class="outfit-img">
+            <img src="https://images.unsplash.com/photo-1539008835657-9e8e9680c956?w=500&q=80" alt="Lehenga">
+            <span class="outfit-badge available">Available</span>
+            <button class="outfit-quick-book">Book Now</button>
+          </div>
+          <div class="outfit-info">
+            <div class="outfit-meta">
+              <div>
+                <div class="outfit-name">Ivory Lehenga Set</div>
+                <div class="outfit-designer">Sabyasachi Edit</div>
+              </div>
+              <div class="outfit-price">
+                <div class="price-per-day">₹899</div>
+                <div class="price-label">per day</div>
+              </div>
+            </div>
+            <div class="outfit-sizes">
+              <div class="size-dot">XS</div>
+              <div class="size-dot active">S</div>
+              <div class="size-dot">M</div>
+              <div class="size-dot">L</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="outfit-card">
+          <div class="outfit-img">
+            <img src="https://images.unsplash.com/photo-1485231183945-fffde7cc051e?w=500&q=80" alt="Gown">
+            <span class="outfit-badge limited">2 Left</span>
+            <button class="outfit-quick-book">Book Now</button>
+          </div>
+          <div class="outfit-info">
+            <div class="outfit-meta">
+              <div>
+                <div class="outfit-name">Emerald Floor Gown</div>
+                <div class="outfit-designer">Manish Malhotra</div>
+              </div>
+              <div class="outfit-price">
+                <div class="price-per-day">₹1,299</div>
+                <div class="price-label">per day</div>
+              </div>
+            </div>
+            <div class="outfit-sizes">
+              <div class="size-dot">S</div>
+              <div class="size-dot active">M</div>
+              <div class="size-dot">L</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="outfit-card">
+          <div class="outfit-img">
+            <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=500&q=80" alt="Sharara">
+            <span class="outfit-badge available">Available</span>
+            <button class="outfit-quick-book">Book Now</button>
+          </div>
+          <div class="outfit-info">
+            <div class="outfit-meta">
+              <div>
+                <div class="outfit-name">Rose Sharara Set</div>
+                <div class="outfit-designer">Anita Dongre</div>
+              </div>
+              <div class="outfit-price">
+                <div class="price-per-day">₹749</div>
+                <div class="price-label">per day</div>
+              </div>
+            </div>
+            <div class="outfit-sizes">
+              <div class="size-dot">XS</div>
+              <div class="size-dot">S</div>
+              <div class="size-dot active">M</div>
+              <div class="size-dot">L</div>
+              <div class="size-dot">XL</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="outfit-card">
+          <div class="outfit-img">
+            <img src="https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=500&q=80" alt="Suit">
+            <span class="outfit-badge available">Available</span>
+            <button class="outfit-quick-book">Book Now</button>
+          </div>
+          <div class="outfit-info">
+            <div class="outfit-meta">
+              <div>
+                <div class="outfit-name">Midnight Bandhgala</div>
+                <div class="outfit-designer">Raghavendra Rathore</div>
+              </div>
+              <div class="outfit-price">
+                <div class="price-per-day">₹999</div>
+                <div class="price-label">per day</div>
+              </div>
+            </div>
+            <div class="outfit-sizes">
+              <div class="size-dot">S</div>
+              <div class="size-dot">M</div>
+              <div class="size-dot active">L</div>
+              <div class="size-dot">XL</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="outfit-card">
+          <div class="outfit-img">
+            <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=500&q=80" alt="Saree">
+            <span class="outfit-badge limited">3 Left</span>
+            <button class="outfit-quick-book">Book Now</button>
+          </div>
+          <div class="outfit-info">
+            <div class="outfit-meta">
+              <div>
+                <div class="outfit-name">Silk Kanjeevaram</div>
+                <div class="outfit-designer">House of Nair</div>
+              </div>
+              <div class="outfit-price">
+                <div class="price-per-day">₹649</div>
+                <div class="price-label">per day</div>
+              </div>
+            </div>
+            <div class="outfit-sizes">
+              <div class="size-dot active">Free</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 6 -->
+        <div class="outfit-card">
+          <div class="outfit-img">
+            <img src="https://images.unsplash.com/photo-1495385794356-15371f348c31?w=500&q=80" alt="Cocktail">
+            <span class="outfit-badge available">Available</span>
+            <button class="outfit-quick-book">Book Now</button>
+          </div>
+          <div class="outfit-info">
+            <div class="outfit-meta">
+              <div>
+                <div class="outfit-name">Gold Cocktail Dress</div>
+                <div class="outfit-designer">Nikhil Thampi</div>
+              </div>
+              <div class="outfit-price">
+                <div class="price-per-day">₹1,099</div>
+                <div class="price-label">per day</div>
+              </div>
+            </div>
+            <div class="outfit-sizes">
+              <div class="size-dot">XS</div>
+              <div class="size-dot active">S</div>
+              <div class="size-dot">M</div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /outfit-grid -->
+    </div>
+  </div>
+
+  <!-- ── HOW IT WORKS ── -->
+  <div class="how-section">
+    <div class="container">
+      <div class="text-center">
+        <div class="section-label" style="justify-content:center;"><span>Simple Process</span></div>
+        <div class="section-title" style="color:var(--cream); text-align:center;">How <em style="color:var(--gold-light);">DRAPE</em> Works</div>
+      </div>
+
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-num">01</div>
+          <div class="step-title">Browse & Choose</div>
+          <p class="step-desc">Explore hundreds of curated outfits filtered by occasion, size, and budget.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">02</div>
+          <div class="step-title">Book Your Dates</div>
+          <p class="step-desc">Select your rental period — 1 to 7 days. We'll check availability instantly.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">03</div>
+          <div class="step-title">We Deliver</div>
+          <p class="step-desc">Your outfit arrives cleaned, pressed, and packaged to your doorstep.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">04</div>
+          <div class="step-title">Wear & Return</div>
+          <p class="step-desc">Enjoy your moment. Return with our prepaid label — no dry-cleaning needed.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── TESTIMONIAL ── -->
+  <div class="testimonial-section">
+    <div class="container">
+      <div class="testimonial-divider"></div>
+      <p class="testimonial-quote">"I wore a Sabyasachi lehenga to my best friend's wedding for a fraction of the purchase price. DRAPE made me feel extraordinary."</p>
+      <div class="testimonial-author">Priya Menon &nbsp;·&nbsp; Kochi, Kerala</div>
+      <div class="testimonial-divider"></div>
+    </div>
+  </div>
+
+  <!-- ── SUBSCRIBE ── -->
+  <div class="subscribe-section">
+    <div class="container">
+      <div class="subscribe-inner">
+        <div class="section-label" style="justify-content:center; margin-bottom:10px;">Stay in Style</div>
+        <div class="section-title" style="color:var(--cream); text-align:center;">New Arrivals, <em>First</em></div>
+        <p class="section-sub" style="text-align:center;">Get notified when new designer outfits are added. Exclusive early access for subscribers.</p>
+        <div class="subscribe-form-row">
+          <input type="email" class="subscribe-input" placeholder="Your email address">
+          <button class="subscribe-btn">Subscribe</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% endblock %}
+
+  <!-- ── FOOTER ── -->
+  <div class="footer">
+    <div class="container">
+      <div class="footer-logo">DRAPE</div>
+      <div class="footer-menu">
+        <a href="#">Home</a>
+        <a href="#">Help</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">How It Works</a>
+        <a href="#">Contact Us</a>
+      </div>
+      <div class="footer-social">
+        <a href="#"><i class="fa fa-facebook"></i></a>
+        <a href="#"><i class="fa fa-twitter"></i></a>
+        <a href="#"><i class="fa fa-instagram"></i></a>
+        <a href="#"><i class="fa fa-pinterest"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-footer">
+    <div class="container">
+      <p>Copyright &copy; 2025 DRAPE Outfit Rentals — Design by <a href="#">Your Studio</a></p>
+    </div>
+  </div>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="/static/vendor/jquery/jquery.min.js"></script>
+  <script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="/static/assets/js/custom.js"></script>
+  <script src="/static/assets/js/owl.js"></script>
+
+  <script>
+    // Size selector
+    document.querySelectorAll('.size-dot').forEach(dot => {
+      dot.addEventListener('click', function () {
+        this.closest('.outfit-sizes').querySelectorAll('.size-dot').forEach(d => d.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+
+    // Smooth scroll to featured
+    document.querySelectorAll('a[href="#featured"]').forEach(a => {
+      a.addEventListener('click', e => {
+        e.preventDefault();
+        document.getElementById('featured').scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+  </script>
+
+</body>
+</html>

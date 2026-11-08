@@ -1,0 +1,359 @@
+{% extends 'admin_index.html' %}
+{% block content %}
+
+<style>
+  .payment-hero {
+    background: var(--charcoal);
+    padding: 64px 0 56px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .payment-hero::before {
+    content: 'DRAPE';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 180px;
+    font-weight: 700;
+    color: rgba(201,169,110,0.04);
+    letter-spacing: 30px;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-tag {
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .hero-tag::before { content: ''; width: 36px; height: 1px; background: var(--gold); }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(34px, 4vw, 54px);
+    font-weight: 300;
+    color: var(--cream);
+    line-height: 1.1;
+  }
+
+  .hero-title em { font-style: italic; color: var(--gold-light); }
+
+  .payment-content {
+    background: var(--cream);
+    padding: 64px 0 100px;
+  }
+
+  .detail-card {
+    max-width: 680px;
+    background: var(--warm-white);
+    box-shadow: 0 24px 60px rgba(26,26,24,0.08);
+    position: relative;
+  }
+
+  .detail-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(to right, var(--gold), var(--gold-light), var(--gold));
+  }
+
+  .card-inner { padding: 48px 44px 52px; }
+
+  .amount-badge {
+    background: var(--charcoal);
+    padding: 18px 24px;
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .amount-badge .lbl {
+    font-size: 9px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.45);
+    margin-bottom: 3px;
+  }
+
+  .amount-badge .note {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    color: rgba(245,240,232,0.25);
+    text-transform: uppercase;
+  }
+
+  .amount-badge .val {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 300;
+    color: var(--gold-light);
+    line-height: 1;
+  }
+
+  .detail-block { margin-bottom: 28px; }
+
+  .detail-block-header {
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--bone);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .detail-block-header i { font-size: 12px; }
+
+  .detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(237,231,217,0.6);
+    gap: 24px;
+  }
+
+  .detail-row:last-child { border-bottom: none; }
+
+  .detail-key {
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+
+  .detail-val {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    color: var(--charcoal);
+    text-align: right;
+  }
+
+  .detail-val.sm {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+  }
+
+  .card-masked { font-size: 13px; letter-spacing: 2px; color: var(--muted); }
+
+  .status-paid {
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    background: #EBF5E1;
+    color: #3A7A10;
+    display: inline-block;
+  }
+
+  .status-pending {
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    background: #FFF4E0;
+    color: #8A5A00;
+    display: inline-block;
+  }
+
+  .card-actions { display: flex; gap: 12px; margin-top: 8px; flex-wrap: wrap; }
+
+  .btn-back {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--charcoal);
+    text-decoration: none;
+    border: 1px solid rgba(26,26,24,0.2);
+    padding: 13px 26px;
+    transition: all 0.3s;
+    display: inline-block;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .btn-back:hover { border-color: var(--gold); color: var(--gold); text-decoration: none; }
+
+  /* No payment state */
+  .no-payment {
+    padding: 64px 40px;
+    text-align: center;
+  }
+
+  .no-payment-icon {
+    width: 60px; height: 60px;
+    border: 1px solid rgba(201,169,110,0.3);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 22px;
+    color: var(--gold);
+    font-size: 20px;
+  }
+
+  .no-payment-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 300;
+    color: var(--charcoal);
+    margin-bottom: 8px;
+  }
+
+  .no-payment-sub { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+
+  @media (max-width: 576px) {
+    .card-inner { padding: 32px 22px 40px; }
+    .detail-val { font-size: 16px; }
+  }
+</style>
+
+<!-- Hero -->
+<div class="payment-hero">
+  <div class="container">
+    <div class="hero-inner">
+      <div class="hero-tag">Admin Console</div>
+      <div class="hero-title">Payment <em>Details</em></div>
+    </div>
+  </div>
+</div>
+
+<!-- Content -->
+<div class="payment-content">
+  <div class="container">
+    <div class="section-label">Order Review</div>
+    <div class="section-title">Booking <em>Summary</em></div>
+
+    <div class="detail-card">
+      <div class="card-inner">
+
+        {% if payment %}
+
+        <div class="amount-badge">
+          <div>
+            <div class="lbl">Amount Paid</div>
+            <div class="note">50% Advance</div>
+          </div>
+          <div class="val">₹{{ payment.amount }}</div>
+        </div>
+
+        <!-- Customer -->
+        <div class="detail-block">
+          <div class="detail-block-header">
+            <i class="fa fa-user"></i> Customer Details
+          </div>
+          <div class="detail-row">
+            <div class="detail-key">Order ID</div>
+            <div class="detail-val">#{{ order.id }}</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-key">Name</div>
+            <div class="detail-val">{{ order.name }}</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-key">Email</div>
+            <div class="detail-val sm">{{ order.email }}</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-key">Phone</div>
+            <div class="detail-val sm">{{ order.phone_number }}</div>
+          </div>
+        </div>
+
+        <!-- Outfit -->
+        <div class="detail-block">
+          <div class="detail-block-header">
+            <i class="fa fa-shirt"></i> Outfit Details
+          </div>
+          <div class="detail-row">
+            <div class="detail-key">Outfit</div>
+            <div class="detail-val">{{ order.outfit.name }}</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-key">Size</div>
+            <div class="detail-val">{{ order.size|default:"—" }}</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-key">Booking Date</div>
+            <div class="detail-val sm">{{ order.booking_date|date:"M d, Y" }}</div>
+          </div>
+        </div>
+
+        <!-- Payment -->
+        <div class="detail-block">
+          <div class="detail-block-header">
+            <i class="fa fa-credit-card"></i> Payment Details
+          </div>
+          <div class="detail-row">
+            <div class="detail-key">Status</div>
+            <div class="detail-val">
+              <span class="status-paid">{{ payment.status }}</span>
+            </div>
+          </div>
+          {% if payment.upi_id %}
+          <div class="detail-row">
+            <div class="detail-key">Method</div>
+            <div class="detail-val">UPI</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-key">UPI ID</div>
+            <div class="detail-val sm">{{ payment.upi_id }}</div>
+          </div>
+          {% else %}
+          <div class="detail-row">
+            <div class="detail-key">Card Holder</div>
+            <div class="detail-val">{{ payment.card_holder_name }}</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-key">Card Number</div>
+            <div class="detail-val">
+              <span class="card-masked">•••• •••• ••••</span>
+              {{ payment.card_number|slice:"-4:" }}
+            </div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-key">Expiry</div>
+            <div class="detail-val">{{ payment.expiry_date }}</div>
+          </div>
+          {% endif %}
+        </div>
+
+        {% else %}
+
+        <div class="no-payment">
+          <div class="no-payment-icon"><i class="fa fa-credit-card"></i></div>
+          <div class="no-payment-title">No payment found</div>
+          <p class="no-payment-sub">No payment record is linked to this order yet.</p>
+        </div>
+
+        {% endif %}
+
+        <div class="card-actions">
+          <a href="{% url 'admin_orders' %}" class="btn-back">
+            <i class="fa fa-arrow-left" style="margin-right:8px; font-size:11px;"></i>Back to Orders
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

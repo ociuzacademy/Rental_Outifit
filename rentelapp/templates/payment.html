@@ -1,0 +1,444 @@
+{% extends 'user_index.html' %}
+{% block content %}
+
+<style>
+  .payment-section {
+    background: var(--cream);
+    padding: 80px 0 100px;
+  }
+
+  /* ── CARD ── */
+  .payment-card {
+    max-width: 520px;
+    margin: 0 auto;
+    background: var(--warm-white);
+    position: relative;
+    box-shadow: 0 24px 60px rgba(26,26,24,0.09);
+  }
+
+  /* gold top bar */
+  .payment-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(to right, var(--gold), var(--gold-light), var(--gold));
+  }
+
+  .payment-card-inner {
+    padding: 48px 44px 52px;
+  }
+
+  /* ── HEADER ── */
+  .payment-header {
+    text-align: center;
+    margin-bottom: 36px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--bone);
+  }
+
+  .payment-tag {
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .payment-tag::before,
+  .payment-tag::after {
+    content: '';
+    width: 24px; height: 1px;
+    background: var(--gold);
+  }
+
+  .payment-header h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    font-weight: 300;
+    color: var(--charcoal);
+    line-height: 1.1;
+  }
+
+  .payment-header h2 em {
+    font-style: italic;
+    color: var(--muted);
+  }
+
+  /* ── AMOUNT BADGE ── */
+  .amount-badge {
+    background: var(--charcoal);
+    padding: 18px 24px;
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .amount-label {
+    font-size: 9px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.45);
+  }
+
+  .amount-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 300;
+    color: var(--gold-light);
+    line-height: 1;
+  }
+
+  .amount-note {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    color: rgba(245,240,232,0.3);
+    text-transform: uppercase;
+    margin-top: 3px;
+  }
+
+  /* ── FORM FIELDS ── */
+  .field-group {
+    margin-bottom: 22px;
+  }
+
+  .field-group label {
+    font-size: 9px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 400;
+  }
+
+  .field-group input,
+  .field-group select {
+    width: 100%;
+    padding: 13px 16px;
+    background: var(--warm-white);
+    border: 1px solid var(--bone);
+    border-bottom: 2px solid var(--bone);
+    color: var(--charcoal);
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    transition: border-color 0.3s, background 0.2s;
+    border-radius: 0;
+    -webkit-appearance: none;
+    appearance: none;
+    box-sizing: border-box;
+  }
+
+  .field-group input:focus,
+  .field-group select:focus {
+    border-bottom-color: var(--gold);
+    background: #fffef9;
+  }
+
+  .field-group input::placeholder {
+    color: rgba(122,114,104,0.4);
+    font-size: 13px;
+  }
+
+  /* select arrow */
+  .select-wrapper {
+    position: relative;
+  }
+
+  .select-wrapper::after {
+    content: '\f107';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gold);
+    pointer-events: none;
+    font-size: 13px;
+  }
+
+  /* ── METHOD TABS ── */
+  .method-tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    margin-bottom: 28px;
+  }
+
+  .method-tab {
+    padding: 14px 10px;
+    border: 1px solid var(--bone);
+    background: var(--warm-white);
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.25s;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .method-tab i { font-size: 14px; }
+
+  .method-tab.active {
+    background: var(--charcoal);
+    border-color: var(--charcoal);
+    color: var(--cream);
+  }
+
+  .method-tab:not(.active):hover {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  /* ── PAYMENT PANELS ── */
+  .payment-panel {
+    display: none;
+    animation: fadeUp 0.35s ease forwards;
+  }
+
+  .payment-panel.active { display: block; }
+
+  /* ── FIELD ROW ── */
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  /* ── SUBMIT ── */
+  .btn-pay {
+    width: 100%;
+    padding: 16px;
+    background: var(--gold);
+    border: none;
+    font-size: 11px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    color: var(--warm-black);
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .btn-pay:hover {
+    background: var(--gold-light);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(201,169,110,0.25);
+  }
+
+  /* ── SECURITY NOTE ── */
+  .security-note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 20px;
+    font-size: 11px;
+    color: rgba(122,114,104,0.6);
+    letter-spacing: 0.5px;
+  }
+
+  .security-note i { color: var(--gold); font-size: 12px; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 576px) {
+    .payment-card-inner { padding: 32px 22px 40px; }
+    .field-row { grid-template-columns: 1fr; }
+  }
+</style>
+
+<div class="payment-section">
+  <div class="container">
+    <div class="payment-card">
+      <div class="payment-card-inner">
+
+        <!-- Header -->
+        <div class="payment-header">
+          <div class="payment-tag">Checkout</div>
+          <h2>Secure <em>Payment</em></h2>
+        </div>
+
+        <!-- Amount -->
+        <div class="amount-badge">
+          <div>
+            <div class="amount-label">Amount Due</div>
+            <div class="amount-note">50% Advance</div>
+          </div>
+          <div class="amount-value">₹{{ amount }}</div>
+        </div>
+
+        <form method="POST">
+          {% csrf_token %}
+
+          <!-- Hidden method input kept for form submission -->
+          <input type="hidden" name="payment_method" id="payment_method_hidden" value="card">
+
+          <!-- Method Tabs (visual switcher) -->
+          <div class="method-tabs">
+            <div class="method-tab active" id="tab-card" onclick="switchMethod('card')">
+              <i class="fa fa-credit-card"></i> Card
+            </div>
+            <div class="method-tab" id="tab-upi" onclick="switchMethod('upi')">
+              <i class="fa fa-mobile-screen"></i> UPI
+            </div>
+          </div>
+
+       <!-- CARD PANEL -->
+<div class="payment-panel active" id="panel-card">
+  <div class="field-group">
+    <label>Cardholder Name</label>
+    <input type="text"
+           name="card_holder_name"
+           id="card_holder_name"
+           placeholder="As on card"
+           pattern="^[A-Za-z][A-Za-z .'\-]*[A-Za-z]$"
+           title="Letters only. Allowed: spaces, periods, hyphens, apostrophes. No numbers."
+           autocomplete="cc-name">
+  </div>
+  <div class="field-group">
+    <label>Card Number</label>
+    <input type="text"
+           name="card_number"
+           id="card_number"
+           maxlength="16"
+           pattern="\d{16}"
+           placeholder="1234 5678 9012 3456"
+           title="16-digit card number"
+           inputmode="numeric"
+           autocomplete="cc-number">
+  </div>
+  <div class="field-row">
+    <div class="field-group">
+      <label>Expiry Date</label>
+      <input type="text"
+             name="expiry_date"
+             id="expiry_date"
+             placeholder="MM / YY"
+             pattern="(0[1-9]|1[0-2])\/\d{2}"
+             title="Format: MM / YY"
+             maxlength="5"
+             autocomplete="cc-exp">
+    </div>
+    <div class="field-group">
+      <label>CVV</label>
+      <input type="password"
+             name="cvv"
+             id="cvv"
+             maxlength="3"
+             pattern="\d{3}"
+             placeholder="• • •"
+             title="3-digit CVV"
+             inputmode="numeric"
+             autocomplete="cc-csc">
+    </div>
+  </div>
+</div>
+
+<!-- UPI PANEL -->
+<div class="payment-panel" id="panel-upi">
+  <div class="field-group">
+    <label>UPI ID</label>
+    <input type="text"
+           name="upi_id"
+           id="upi_id"
+           placeholder="yourname@upi"
+           pattern="^[a-zA-Z0-9.\-_]{2,256}@[a-zA-Z][a-zA-Z]{2,64}$"
+           title="Valid UPI ID format: name@provider (e.g. john@okaxis)">
+  </div>
+</div>
+          <!-- UPI PANEL -->
+         
+          <!-- Submit -->
+<!-- Submit -->
+<button type="submit" class="btn-pay" onclick="return validateForm()">
+  <i class="fa fa-lock"></i> Pay Now
+</button>
+
+<script>
+  function switchMethod(method) {
+    document.getElementById('payment_method_hidden').value = method;
+
+    document.getElementById('tab-card').classList.toggle('active', method === 'card');
+    document.getElementById('tab-upi').classList.toggle('active', method === 'upi');
+
+    document.getElementById('panel-card').classList.toggle('active', method === 'card');
+    document.getElementById('panel-upi').classList.toggle('active', method === 'upi');
+
+    // Toggle required so browser validation only fires on visible fields
+    const cardFields = ['card_holder_name', 'card_number', 'expiry_date', 'cvv'];
+    cardFields.forEach(id => {
+      document.getElementById(id).required = (method === 'card');
+    });
+    document.getElementById('upi_id').required = (method === 'upi');
+  }
+
+  // Set initial required state (card is default)
+  document.addEventListener('DOMContentLoaded', () => switchMethod('card'));
+
+  function validateForm() {
+    const method = document.getElementById('payment_method_hidden').value;
+
+    if (method === 'card') {
+      const name = document.getElementById('card_holder_name').value.trim();
+      const number = document.getElementById('card_number').value.trim();
+      const expiry = document.getElementById('expiry_date').value.trim();
+      const cvv = document.getElementById('cvv').value.trim();
+
+      // Name: letters, spaces, periods, hyphens, apostrophes only
+      if (!/^[A-Za-z][A-Za-z .'\-]*[A-Za-z]$/.test(name)) {
+        alert("Invalid cardholder name. Use letters only (spaces, . - ' allowed). No numbers.");
+        return false;
+      }
+      if (!/^\d{16}$/.test(number)) {
+        alert("Card number must be exactly 16 digits.");
+        return false;
+      }
+      // Expiry: not in the past
+      if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(expiry)) {
+        alert("Expiry must be MM/YY format.");
+        return false;
+      }
+      const [mm, yy] = expiry.split('/').map(Number);
+      const now = new Date();
+      const expDate = new Date(2000 + yy, mm - 1, 1);  // first of expiry month
+      if (expDate < new Date(now.getFullYear(), now.getMonth(), 1)) {
+        alert("Your card has expired.");
+        return false;
+      }
+      if (!/^\d{3}$/.test(cvv)) {
+        alert("CVV must be exactly 3 digits.");
+        return false;
+      }
+
+    } else if (method === 'upi') {
+      const upi = document.getElementById('upi_id').value.trim();
+      if (!/^[a-zA-Z0-9.\-_]{2,256}@[a-zA-Z][a-zA-Z]{2,64}$/.test(upi)) {
+        alert("Invalid UPI ID. Format: name@provider (e.g. john@okaxis)");
+        return false;
+      }
+    }
+
+    return true;
+  }
+</script>
+{% endblock %}

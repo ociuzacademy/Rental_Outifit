@@ -1,0 +1,279 @@
+{% extends 'user_index.html' %}
+{% block content %}
+
+<style>
+  .success-section {
+    background: var(--cream);
+    padding: 80px 0 100px;
+  }
+
+  .success-card {
+    max-width: 680px;
+    margin: 0 auto;
+    background: var(--warm-white);
+    position: relative;
+    box-shadow: 0 24px 60px rgba(26,26,24,0.09);
+  }
+
+  .success-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(to right, var(--gold), var(--gold-light), var(--gold));
+  }
+
+  .confetti-bar {
+    height: 3px;
+    background: linear-gradient(to right, var(--bone), var(--gold), var(--gold-light), var(--gold), var(--bone));
+    margin-bottom: 32px;
+  }
+
+  .card-inner { padding: 52px 48px 56px; }
+
+  /* Header */
+  .success-header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--bone);
+  }
+
+  .check-circle {
+    width: 64px; height: 64px;
+    border: 1px solid rgba(201,169,110,0.35);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 28px;
+  }
+
+  .check-circle i { color: var(--gold); font-size: 22px; }
+
+  .success-tag {
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+    display: flex; align-items: center; justify-content: center;
+    gap: 14px;
+  }
+
+  .success-tag::before,
+  .success-tag::after {
+    content: '';
+    width: 28px; height: 1px;
+    background: var(--gold);
+  }
+
+  .success-header h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 42px;
+    font-weight: 300;
+    color: var(--charcoal);
+    line-height: 1.1;
+    margin-bottom: 10px;
+  }
+
+  .success-header h2 em { font-style: italic; color: var(--muted); }
+
+  .success-header p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 380px;
+    margin: 0 auto;
+  }
+
+  /* Amount badge */
+  .amount-highlight {
+    background: var(--charcoal);
+    padding: 20px 24px;
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .amount-highlight .label {
+    font-size: 9px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.45);
+    margin-bottom: 3px;
+  }
+
+  .amount-highlight .note {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    color: rgba(245,240,232,0.25);
+    text-transform: uppercase;
+  }
+
+  .amount-highlight .value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 300;
+    color: var(--gold-light);
+    line-height: 1;
+  }
+
+  /* Detail blocks */
+  .detail-block { margin-bottom: 28px; }
+
+  .detail-block-header {
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--bone);
+    display: flex; align-items: center; gap: 10px;
+  }
+
+  .detail-block-header i { font-size: 12px; }
+
+  .detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(237,231,217,0.6);
+    gap: 24px;
+  }
+
+  .detail-row:last-child { border-bottom: none; }
+
+  .detail-key {
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+
+  .detail-val {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    color: var(--charcoal);
+    text-align: right;
+  }
+
+  .card-masked {
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: var(--muted);
+  }
+
+  /* Action buttons */
+  .actions {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 576px) {
+    .card-inner { padding: 32px 22px 40px; }
+    .detail-val { font-size: 16px; }
+  }
+</style>
+
+<div class="success-section">
+  <div class="container">
+    <div class="success-card">
+      <div class="confetti-bar"></div>
+      <div class="card-inner">
+
+        <div class="success-header">
+          <div class="check-circle">
+            <i class="fa fa-check"></i>
+          </div>
+          <div class="success-tag">Confirmed</div>
+          <h2>Booking <em>Successful</em></h2>
+          <p>Thank you for choosing DRAPE. Your outfit has been reserved and we will be in touch shortly.</p>
+        </div>
+
+        <div class="amount-highlight">
+          <div>
+            <div class="label">Amount Paid</div>
+            <div class="note">50% Advance</div>
+          </div>
+          <div class="value">₹{{ payment.amount }}</div>
+        </div>
+
+        <!-- Outfit Details -->
+        <div class="detail-block">
+          <div class="detail-block-header">
+            <i class="fa fa-shirt"></i> Outfit Details
+          </div>
+          <div class="detail-row">
+            <div class="detail-key">Outfit</div>
+            <div class="detail-val">{{ booking.outfit.name }}</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-key">Size</div>
+            <div class="detail-val">{{ booking.size }}</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-key">Booking Date</div>
+            <div class="detail-val">{{ booking.booking_date }}</div>
+          </div>
+        </div>
+
+        <!-- Customer Details -->
+        <div class="detail-block">
+          <div class="detail-block-header">
+            <i class="fa fa-user"></i> Customer Details
+          </div>
+          <div class="detail-row">
+            <div class="detail-key">Name</div>
+            <div class="detail-val">{{ booking.name }}</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-key">Email</div>
+            <div class="detail-val" style="font-family:'DM Sans',sans-serif; font-size:14px;">{{ booking.email }}</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-key">Phone</div>
+            <div class="detail-val" style="font-family:'DM Sans',sans-serif; font-size:14px;">{{ booking.phone_number }}</div>
+          </div>
+        </div>
+
+        <!-- Payment Details -->
+        <div class="detail-block">
+          <div class="detail-block-header">
+            <i class="fa fa-credit-card"></i> Payment Details
+          </div>
+          <div class="detail-row">
+            <div class="detail-key">Card Holder</div>
+            <div class="detail-val">{{ payment.card_holder_name }}</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-key">Card Number</div>
+            <div class="detail-val">
+              <span class="card-masked">•••• •••• ••••</span>
+              {{ payment.card_number|slice:"-4:" }}
+            </div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-key">Expiry</div>
+            <div class="detail-val">{{ payment.expiry_date }}</div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <a href="{% url 'user_index' %}" class="btn-gold">
+            <i class="fa fa-house" style="margin-right:8px; font-size:12px;"></i>Go to Home
+          </a>
+          <a href="{% url 'my_orders' %}" class="btn-outline-cream">My Orders</a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

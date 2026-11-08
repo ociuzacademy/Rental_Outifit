@@ -1,0 +1,162 @@
+{% extends 'index.html' %}
+{% block content %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+.login-section {
+    background: var(--charcoal);
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-card {
+    background: var(--warm-black);
+    border: 1px solid rgba(201,169,110,0.2);
+    padding: 40px;
+    width: 360px;
+}
+
+.login-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    color: var(--cream);
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.login-sub {
+    text-align: center;
+    font-size: 12px;
+    color: rgba(245,240,232,0.5);
+    margin-bottom: 30px;
+    letter-spacing: 2px;
+}
+
+.form-group {
+    margin-bottom: 18px;
+    position: relative;
+}
+
+.form-control-drape {
+    width: 100%;
+    background: transparent;
+    border: 1px solid rgba(201,169,110,0.3);
+    padding: 12px;
+    color: var(--cream);
+    font-size: 13px;
+    outline: none;
+}
+
+.form-control-drape:focus {
+    border-color: var(--gold);
+}
+
+.toggle-icon {
+    position: absolute;
+    right: 10px;
+    top: 12px;
+    color: var(--gold);
+    cursor: pointer;
+}
+
+.toggle-icon:hover {
+    color: var(--gold-light);
+}
+
+.btn-gold {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.error-message {
+    color: #ff6b6b;
+    font-size: 12px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.register-link {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 12px;
+}
+
+.register-link a {
+    color: var(--gold);
+    text-decoration: none;
+}
+
+.register-link a:hover {
+    text-decoration: underline;
+}
+
+.login-text {
+    color: var(--cream); /* white-ish */
+}
+
+.login-link a {
+    color: var(--gold);
+    text-decoration: none;
+}
+
+.login-link a:hover {
+    color: var(--gold-light);
+}
+</style>
+
+<div class="login-section">
+    <div class="login-card">
+
+        <div class="login-title">Welcome Back</div>
+        <div class="login-sub">LOGIN TO DRAPE</div>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <input type="email" name="email" class="form-control-drape" placeholder="Email Address" required>
+            </div>
+
+            <div class="form-group">
+                <input type="password" id="password" name="password" class="form-control-drape" placeholder="Password" required>
+
+                <i id="toggleIcon"
+                   class="fa-solid fa-eye toggle-icon"
+                   onclick="togglePassword()"></i>
+            </div>
+
+            <button type="submit" class="btn-gold">Login</button>
+        </form>
+
+        {% if form.errors %}
+        <div class="error-message">
+            Invalid email or password
+        </div>
+        {% endif %}
+
+        <div class="login-link">
+    <span class="login-text">Don't have an account?</span>
+    <a href="{% url 'register' %}">Register</a>
+</div>
+    </div>
+</div>
+
+<script>
+function togglePassword() {
+    let passwordField = document.getElementById("password");
+    let icon = document.getElementById("toggleIcon");
+
+    if (passwordField.type === "password") {
+        passwordField.type = "text";
+        icon.classList.replace("fa-eye", "fa-eye-slash");
+    } else {
+        passwordField.type = "password";
+        icon.classList.replace("fa-eye-slash", "fa-eye");
+    }
+}
+</script>
+
+{% endblock %}

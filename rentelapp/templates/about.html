@@ -1,0 +1,655 @@
+{% extends "index.html" %}
+
+{% block content %}
+
+<style>
+  /* ── PAGE HERO ── */
+  .page-hero {
+    background: var(--charcoal);
+    padding: 110px 0 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .page-hero::before {
+    content: 'DRAPE';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 220px;
+    font-weight: 700;
+    color: rgba(201,169,110,0.04);
+    letter-spacing: 30px;
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .page-hero-inner { position: relative; z-index: 2; text-align: center; }
+
+  .page-hero .breadcrumb-trail {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.35);
+    margin-bottom: 20px;
+  }
+
+  .page-hero .breadcrumb-trail a {
+    color: var(--gold);
+    text-decoration: none;
+  }
+
+  .page-hero .breadcrumb-trail a:hover { text-decoration: underline; }
+
+  .page-hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(48px, 6vw, 80px);
+    font-weight: 300;
+    color: var(--cream);
+    letter-spacing: -1px;
+    line-height: 1.05;
+    margin-bottom: 20px;
+  }
+
+  .page-hero h1 em {
+    font-style: italic;
+    color: var(--gold-light);
+  }
+
+  .page-hero p {
+    font-size: 15px;
+    color: rgba(245,240,232,0.5);
+    max-width: 520px;
+    margin: 0 auto;
+    line-height: 1.8;
+  }
+
+  .page-hero-divider {
+    width: 48px; height: 1px;
+    background: var(--gold);
+    margin: 28px auto;
+    opacity: 0.6;
+  }
+
+  /* ── OUR STORY ── */
+  .story-section {
+    padding: 110px 0;
+    background: var(--warm-white);
+  }
+
+  .story-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .story-img-wrap {
+    position: relative;
+  }
+
+  .story-img-main {
+    width: 100%;
+    aspect-ratio: 4/5;
+    object-fit: cover;
+    display: block;
+    filter: brightness(0.9);
+  }
+
+  .story-img-accent {
+    position: absolute;
+    width: 48%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    bottom: -32px;
+    right: -32px;
+    border: 6px solid var(--warm-white);
+    filter: brightness(0.85);
+  }
+
+  .story-badge {
+    position: absolute;
+    top: 28px; left: -20px;
+    background: var(--gold);
+    color: var(--warm-black);
+    padding: 16px 22px;
+    text-align: center;
+  }
+
+  .story-badge .yr {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 30px;
+    font-weight: 600;
+    line-height: 1;
+    display: block;
+  }
+
+  .story-badge .yr-label {
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .story-text .section-label { margin-bottom: 12px; }
+
+  .story-text .section-title { margin-bottom: 20px; }
+
+  .story-text p {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.9;
+    margin-bottom: 18px;
+  }
+
+  .story-text p strong {
+    color: var(--charcoal);
+    font-weight: 500;
+  }
+
+  .story-values {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 36px;
+  }
+
+  .value-pill {
+    border: 1px solid var(--bone);
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: border-color 0.3s, background 0.3s;
+  }
+
+  .value-pill:hover {
+    border-color: var(--gold);
+    background: #fdf9f2;
+  }
+
+  .value-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .value-text {
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    color: var(--charcoal);
+    font-weight: 500;
+  }
+
+  /* ── STATS ── */
+  .stats-section {
+    padding: 80px 0;
+    background: var(--charcoal);
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+  }
+
+  .stat-block {
+    padding: 48px 36px;
+    text-align: center;
+    border: 1px solid rgba(201,169,110,0.1);
+    transition: background 0.3s;
+  }
+
+  .stat-block:hover { background: rgba(201,169,110,0.05); }
+
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 58px;
+    font-weight: 300;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 10px;
+  }
+
+  .stat-label {
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.4);
+  }
+
+  /* ── TEAM ── */
+  .team-section {
+    padding: 110px 0;
+    background: var(--cream);
+  }
+
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    margin-top: 60px;
+  }
+
+  .team-card {
+    background: var(--warm-white);
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .team-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 50px rgba(26,26,24,0.1);
+  }
+
+  .team-img {
+    width: 100%;
+    aspect-ratio: 3/4;
+    object-fit: cover;
+    object-position: top;
+    display: block;
+    filter: brightness(0.88) saturate(0.85);
+    transition: filter 0.4s;
+  }
+
+  .team-card:hover .team-img { filter: brightness(0.95) saturate(1); }
+
+  .team-info {
+    padding: 22px 22px 26px;
+    border-top: 2px solid var(--bone);
+  }
+
+  .team-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--charcoal);
+    margin-bottom: 4px;
+  }
+
+  .team-role {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+
+  .team-bio {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* ── MISSION ── */
+  .mission-section {
+    padding: 110px 0;
+    background: var(--warm-black);
+    text-align: center;
+  }
+
+  .mission-inner { max-width: 760px; margin: 0 auto; }
+
+  .mission-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(28px, 3.5vw, 48px);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--cream);
+    line-height: 1.5;
+    margin: 36px 0;
+  }
+
+  .mission-quote em { color: var(--gold-light); font-style: normal; }
+
+  .mission-divider {
+    width: 48px; height: 1px;
+    background: var(--gold);
+    margin: 0 auto 36px;
+    opacity: 0.5;
+  }
+
+  .mission-body {
+    font-size: 15px;
+    color: rgba(245,240,232,0.45);
+    line-height: 1.9;
+    margin-bottom: 48px;
+  }
+
+  /* ── SUSTAINABILITY ── */
+  .sustain-section {
+    padding: 110px 0;
+    background: var(--warm-white);
+  }
+
+  .sustain-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .sustain-text .section-title { margin-bottom: 20px; }
+
+  .sustain-text p {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.9;
+    margin-bottom: 18px;
+  }
+
+  .sustain-points {
+    margin-top: 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .sustain-point {
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+  }
+
+  .sustain-point-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    color: var(--gold);
+    line-height: 1;
+    min-width: 36px;
+    font-weight: 300;
+  }
+
+  .sustain-point-text strong {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--charcoal);
+    margin-bottom: 4px;
+    letter-spacing: 0.3px;
+  }
+
+  .sustain-point-text span {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .sustain-img-stack {
+    position: relative;
+    height: 560px;
+  }
+
+  .sustain-img-a {
+    position: absolute;
+    top: 0; left: 0;
+    width: 72%;
+    height: 75%;
+    object-fit: cover;
+    filter: brightness(0.85);
+  }
+
+  .sustain-img-b {
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 56%;
+    height: 55%;
+    object-fit: cover;
+    filter: brightness(0.9);
+    border: 6px solid var(--warm-white);
+  }
+
+  /* ── CTA ── */
+  .about-cta {
+    padding: 100px 0;
+    background: var(--bone);
+    text-align: center;
+  }
+
+  .about-cta .section-title { margin-bottom: 16px; }
+
+  .about-cta p {
+    font-size: 15px;
+    color: var(--muted);
+    margin-bottom: 40px;
+    max-width: 460px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.8;
+  }
+
+  .cta-actions { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+
+  /* RESPONSIVE */
+  @media (max-width: 991px) {
+    .story-grid, .sustain-grid { grid-template-columns: 1fr; gap: 48px; }
+    .story-img-accent { display: none; }
+    .sustain-img-stack { height: 320px; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .team-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 576px) {
+    .story-values { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+    .team-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+<!-- ── PAGE HERO ── -->
+<div class="page-hero">
+  <div class="container">
+    <div class="page-hero-inner">
+      <div class="breadcrumb-trail">
+        <a href="index.html">Home</a> &nbsp;/&nbsp; About Us
+      </div>
+      <h1>We Believe in <em>Wearing</em><br>Without Owning</h1>
+      <div class="page-hero-divider"></div>
+      <p>DRAPE was born from a simple idea — that every woman deserves to wear extraordinary outfits without paying extraordinary prices.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── OUR STORY ── -->
+<div class="story-section">
+  <div class="container">
+    <div class="story-grid">
+      <div class="story-img-wrap">
+        <img class="story-img-main" src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=700&q=80" alt="Our Story">
+        <img class="story-img-accent" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80" alt="Designer Rack">
+        <div class="story-badge">
+          <span class="yr">2019</span>
+          <span class="yr-label">Est.</span>
+        </div>
+      </div>
+      <div class="story-text">
+        <div class="section-label">Our Story</div>
+        <div class="section-title">From a Wardrobe<br><em>to a Movement</em></div>
+        <p>It started in a small Kochi apartment where our founder, Meera Nair, stood before a closet full of expensive sarees and lehengas worn only once. She asked herself — <strong>why do we own what we barely use?</strong></p>
+        <p>In 2019, DRAPE launched as Kerala's first premium outfit rental platform. Today we serve thousands of customers across South India, partnering with over 80 Indian designers to make luxury fashion <strong>accessible, circular, and joyful.</strong></p>
+        <p>Every outfit in our collection is inspected, professionally cleaned, and curated with love — so that when it arrives at your door, it feels like it was made for you.</p>
+        <div class="story-values">
+          <div class="value-pill">
+            <span class="value-icon">✦</span>
+            <span class="value-text">Curated Quality</span>
+          </div>
+          <div class="value-pill">
+            <span class="value-icon">♻</span>
+            <span class="value-text">Circular Fashion</span>
+          </div>
+          <div class="value-pill">
+            <span class="value-icon">◈</span>
+            <span class="value-text">Designer Partnerships</span>
+          </div>
+          <div class="value-pill">
+            <span class="value-icon">❋</span>
+            <span class="value-text">Doorstep Delivery</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── STATS ── -->
+<div class="stats-section">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-block">
+        <div class="stat-num">500+</div>
+        <div class="stat-label">Curated Outfits</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-num">80+</div>
+        <div class="stat-label">Designer Partners</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-num">12K+</div>
+        <div class="stat-label">Happy Customers</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-num">6</div>
+        <div class="stat-label">Cities Served</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── MISSION ── -->
+<div class="mission-section">
+  <div class="container">
+    <div class="mission-inner">
+      <div class="section-label" style="justify-content:center; color:var(--gold);">Our Mission</div>
+      <div class="mission-divider"></div>
+      <div class="mission-quote">
+        "To make every Indian woman feel <em>extraordinary</em> — not just on special days, but every time she chooses to."
+      </div>
+      <p class="mission-body">Fashion shouldn't be a privilege. We're on a mission to democratise designer wear through a rental model that's beautiful, sustainable, and built around the moments that matter most in your life.</p>
+      <a href="{% url 'register' %}" class="btn-gold">Join DRAPE Today</a>
+    </div>
+  </div>
+</div>
+
+<!-- ── MEET THE TEAM ── -->
+<div class="team-section">
+  <div class="container">
+    <div class="section-label">The People</div>
+    <div class="section-title">Meet the <em>Team</em></div>
+    <p class="section-sub">A passionate group of fashion lovers, technologists, and storytellers building the future of outfit rental.</p>
+
+    <div class="team-grid">
+      <div class="team-card">
+        <img class="team-img" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=500&q=80" alt="Meera Nair">
+        <div class="team-info">
+          <div class="team-name">Meera Nair</div>
+          <div class="team-role">Founder & CEO</div>
+          <p class="team-bio">Fashion entrepreneur with 12 years in luxury retail. Meera's vision is to make India's finest designers accessible to every woman.</p>
+        </div>
+      </div>
+      <div class="team-card">
+        <img class="team-img" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=500&q=80" alt="Arjun Pillai">
+        <div class="team-info">
+          <div class="team-name">Arjun Pillai</div>
+          <div class="team-role">Head of Operations</div>
+          <p class="team-bio">Supply chain veteran who built DRAPE's delivery network from Kochi to Bengaluru. Obsessed with punctuality and packaging.</p>
+        </div>
+      </div>
+      <div class="team-card">
+        <img class="team-img" src="https://images.unsplash.com/photo-1551836022-deb4988cc6c0?w=500&q=80" alt="Riya Thomas">
+        <div class="team-info">
+          <div class="team-name">Riya Thomas</div>
+          <div class="team-role">Creative Director</div>
+          <p class="team-bio">Former stylist for Indian Vogue. Riya hand-curates every outfit in the DRAPE collection with an eye for timeless elegance.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--How it works-->
+  <div class="how-section">
+    <div class="container">
+      <div class="text-center">
+        <div class="section-label" style="justify-content:center;"><span>Simple Process</span></div>
+        <div class="section-title" style="color:var(--cream); text-align:center;">How <em style="color:var(--gold-light);">DRAPE</em> Works</div>
+      </div>
+
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-num">01</div>
+          <div class="step-title">Browse & Choose</div>
+          <p class="step-desc">Explore hundreds of curated outfits filtered by occasion, size, and budget.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">02</div>
+          <div class="step-title">Book Your Dates</div>
+          <p class="step-desc">Select your rental period — 1 to 7 days. We'll check availability instantly.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">03</div>
+          <div class="step-title">We Deliver</div>
+          <p class="step-desc">Your outfit arrives cleaned, pressed, and packaged to your doorstep.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">04</div>
+          <div class="step-title">Wear & Return</div>
+          <p class="step-desc">Enjoy your moment. Return with our prepaid label — no dry-cleaning needed.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- ── SUSTAINABILITY ── -->
+<div class="sustain-section">
+  <div class="container">
+    <div class="sustain-grid">
+      <div class="sustain-text">
+        <div class="section-label">Planet & Purpose</div>
+        <div class="section-title">Fashion That<br><em>Gives Back</em></div>
+        <p>The fashion industry is one of the world's largest polluters. At DRAPE, we believe renting is one of the most powerful acts of conscious consumption you can make.</p>
+        <p>Every outfit rented instead of bought saves water, reduces textile waste, and extends a garment's life cycle — without compromising on beauty or luxury.</p>
+        <div class="sustain-points">
+          <div class="sustain-point">
+            <div class="sustain-point-num">01</div>
+            <div class="sustain-point-text">
+              <strong>Eco Dry Cleaning</strong>
+              <span>All garments cleaned using GOTS-certified, waterless methods that protect fabric and planet.</span>
+            </div>
+          </div>
+          <div class="sustain-point">
+            <div class="sustain-point-num">02</div>
+            <div class="sustain-point-text">
+              <strong>Zero Single-Use Packaging</strong>
+              <span>Every outfit ships in reusable garment bags. Our boxes are 100% recycled and recyclable.</span>
+            </div>
+          </div>
+          <div class="sustain-point">
+            <div class="sustain-point-num">03</div>
+            <div class="sustain-point-text">
+              <strong>Circular Wardrobe Programme</strong>
+              <span>Donate your pre-loved designer outfits to DRAPE's resale archive and earn rental credits.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="sustain-img-stack">
+        <img class="sustain-img-a" src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=600&q=80" alt="Sustainable Fashion">
+        <img class="sustain-img-b" src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=400&q=80" alt="Outfit Care">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── CTA ── -->
+<div class="about-cta">
+  <div class="container">
+    <div class="section-label" style="justify-content:center;">Ready to Begin?</div>
+    <div class="section-title">Your Next <em>Favourite Outfit</em><br>is Waiting</div>
+    <p>Join thousands of women across India who rent, wear, and love — without the clutter.</p>
+    <div class="cta-actions">
+      <a href="{% url 'login' %}" class="btn-gold">Browse Outfits</a>
+      <a href="{% url 'register' %}" class="btn-outline-gold" style="background:transparent; color:var(--charcoal); font-size:11px; letter-spacing:2px; text-transform:uppercase; padding:15px 32px; border:1px solid rgba(26,26,24,0.25); cursor:pointer; text-decoration:none; display:inline-block; transition:all 0.3s; font-family:'DM Sans',sans-serif;">Create Account</a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

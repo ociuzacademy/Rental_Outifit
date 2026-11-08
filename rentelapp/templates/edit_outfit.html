@@ -1,0 +1,179 @@
+{% extends 'admin_index.html' %}
+{% load custom_filters %}
+{% block content %}
+
+<style>
+/* (same CSS — unchanged) */
+.edit-section {
+    background: var(--cream);
+    padding: 80px 0;
+}
+
+.form-card {
+    max-width: 700px;
+    margin: auto;
+    background: var(--warm-white);
+    padding: 50px;
+    border: 1px solid var(--bone);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+}
+
+.form-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.field-group {
+    margin-bottom: 20px;
+}
+
+.field-group label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 8px;
+}
+
+.field-group input,
+.field-group select,
+.field-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--bone);
+    background: white;
+    outline: none;
+}
+
+textarea {
+    height: 100px;
+}
+
+/* IMAGE */
+.image-preview img {
+    width: 120px;
+    border-radius: 5px;
+}
+
+/* BUTTONS */
+.btn-row {
+    margin-top: 30px;
+    display: flex;
+    gap: 10px;
+}
+
+.btn-save {
+    flex: 1;
+    background: var(--gold);
+    border: none;
+    padding: 12px;
+    cursor: pointer;
+}
+
+.btn-cancel {
+    flex: 1;
+    text-align: center;
+    padding: 12px;
+    border: 1px solid var(--bone);
+    text-decoration: none;
+}
+</style>
+
+<div class="edit-section">
+    <div class="form-card">
+
+        <h2 class="form-title">Edit Outfit</h2>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- NAME -->
+            <div class="field-group">
+                <label>Name</label>
+                <input type="text" name="name" value="{{ outfit.name }}" required>
+            </div>
+
+            <!-- CATEGORY -->
+            <div class="field-group">
+                <label>Category</label>
+                <select name="category" id="category" onchange="toggleSize()" required>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}"
+                                data-requires-size="{{ category.requires_size|lower }}"
+                                {% if category.id == outfit.category.id %}selected{% endif %}>
+                            {{ category.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- PRICE -->
+            <div class="field-group">
+                <label>Price</label>
+                <input type="number" name="price" value="{{ outfit.price }}" required>
+            </div>
+            
+            <!-- DELIVERY DATE -->
+            <div class="field-group">
+                <label>Delivery Date</label>
+                <input type="date" name="delivery_date" value="{{ outfit.delivery_date }}" required>
+            </div>
+
+            <!-- SIZE QUANTITY (UPDATED LOGIC) -->
+            <div class="field-group" id="size-section">
+                <label>Size Quantity</label>
+
+                {% for code,label in size_choices %}
+                <div style="margin-bottom:10px;">
+                    <label>{{ label }}</label>
+                    <input type="number" name="qty_{{ code }}"
+                           value="{{ size_data|get_item:code }}"
+                           placeholder="Enter quantity">
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- DESCRIPTION -->
+            <div class="field-group">
+                <label>Description</label>
+                <textarea name="description">{{ outfit.description }}</textarea>
+            </div>
+
+            <!-- IMAGE -->
+            <div class="field-group">
+                <label>Change Image</label>
+                <input type="file" name="image">
+
+                {% if outfit.image %}
+                <div class="image-preview">
+                    <img src="{{ outfit.image.url }}">
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- BUTTONS -->
+            <div class="btn-row">
+                <button type="submit" class="btn-save">Save Changes</button>
+                <a href="{% url 'admin_view_outfit' %}" class="btn-cancel">Cancel</a>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<script>
+function toggleSize() {
+    const select = document.getElementById('category');
+    const option = select.options[select.selectedIndex];
+    const requires = option.getAttribute('data-requires-size') === 'true';
+
+    document.getElementById('size-section').style.display = requires ? 'block' : 'none';
+}
+
+toggleSize();
+</script>
+
+{% endblock %}

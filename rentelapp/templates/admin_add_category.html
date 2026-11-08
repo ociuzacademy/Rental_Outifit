@@ -1,0 +1,357 @@
+{% extends 'admin_index.html' %}
+{% block content %}
+
+<style>
+    /* ── CATEGORY PAGE CUSTOM STYLES ── */
+    .admin-content-section {
+        padding: 80px 0;
+        background: var(--warm-white);
+        min-height: 80vh;
+    }
+
+    .form-card {
+        background: var(--cream);
+        padding: 40px;
+        border: 1px solid rgba(201,169,110,0.15);
+        margin-bottom: 60px;
+        animation: fadeUp 0.8s ease forwards;
+    }
+
+    .form-group {
+        margin-bottom: 24px;
+    }
+
+    .form-group label {
+        display: block;
+        font-size: 10px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 8px;
+    }
+
+    .form-control-drape {
+        width: 100%;
+        background: var(--warm-white);
+        border: 1px solid rgba(201,169,110,0.3);
+        padding: 14px 18px;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 14px;
+        color: var(--charcoal);
+        transition: border-color 0.3s;
+        border-radius: 0;
+    }
+
+    .form-control-drape:focus {
+        outline: none;
+        border-color: var(--gold);
+    }
+
+    .checkbox-group {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .checkbox-group input {
+        width: 18px; height: 18px;
+        accent-color: var(--gold);
+        cursor: pointer;
+    }
+
+    .checkbox-label {
+        font-size: 13px;
+        color: var(--charcoal);
+    }
+
+    /* ── TABLE STYLES ── */
+    .category-table-wrapper {
+        background: white;
+        border: 1px solid var(--bone);
+        overflow: hidden;
+    }
+
+    .drape-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .drape-table thead th {
+        background: var(--charcoal);
+        color: var(--gold-light);
+        font-size: 9px;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+        padding: 18px 24px;
+        font-weight: 500;
+        text-align: left;
+    }
+
+    .drape-table tbody tr {
+        border-bottom: 1px solid var(--bone);
+        transition: background 0.2s;
+    }
+
+    .drape-table tbody tr:hover {
+        background: #FDF9F3;
+    }
+
+    .drape-table td {
+        padding: 20px 24px;
+        font-size: 14px;
+        color: var(--charcoal);
+        vertical-align: middle;
+    }
+
+    .cat-name-display {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 18px;
+        font-weight: 500;
+    }
+
+    .cat-badge {
+        font-size: 9px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        padding: 4px 10px;
+        background: var(--bone);
+        color: var(--muted);
+    }
+
+    .cat-badge.active {
+        background: var(--success-light);
+        color: var(--success);
+    }
+
+    /* ── ACTION BUTTONS ── */
+    .action-btns {
+        display: flex;
+        gap: 10px;
+    }
+
+    .btn-action {
+        font-size: 9px;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        padding: 8px 16px;
+        border: 1px solid rgba(201,169,110,0.3);
+        background: transparent;
+        color: var(--gold);
+        cursor: pointer;
+        transition: all 0.3s;
+        text-decoration: none;
+    }
+
+    .btn-action:hover {
+        background: var(--gold);
+        color: var(--warm-black);
+    }
+
+    .btn-action.delete:hover {
+        background: var(--danger);
+        color: white;
+        border-color: var(--danger);
+    }
+
+    .btn-save {
+        background: var(--gold);
+        color: var(--warm-black);
+        border-color: var(--gold);
+    }
+
+    /* ── INLINE EDIT FORM ── */
+    .inline-edit-row {
+        display: none;
+        background: var(--cream);
+    }
+
+    .edit-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr;
+        gap: 20px;
+        align-items: center;
+    }
+</style>
+
+<div class="admin-content-section">
+    <div class="container">
+        
+        <!-- header -->
+        <div class="mb-5">
+            <div class="section-label">Management</div>
+            <h2 class="section-title">Outfit <em>Categories</em></h2>
+        </div>
+
+        <div class="row">
+            <!-- Add Form -->
+            <div class="col-lg-4">
+                <div class="form-card">
+                    <h3 class="qa-title" style="margin-bottom: 24px;">Add New Category</h3>
+                    <form method="POST" action="{% url 'add_category' %}">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label>Category Name</label>
+                            <input type="text" name="name" class="form-control-drape" placeholder="e.g. Bridal Wear" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-group">
+                                <input type="checkbox" name="requires_size">
+                                <span class="checkbox-label">Requires Sizing Info</span>
+                            </label>
+                        </div>
+                        <button type="submit" class="btn-gold w-100 mt-2">Create Category</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- List Table -->
+            <div class="col-lg-8">
+                <div class="category-table-wrapper">
+                    <table class="drape-table">
+                        <thead>
+                            <tr>
+                                <th>Category Detail</th>
+                                <th>Sizing</th>
+                                <th style="text-align: right;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="category-list-body">
+                            {% for category in categories %}
+                            <tr id="category-row-{{ category.id }}">
+                                <td>
+                                    <div class="cat-name-display" id="cat-name-text-{{ category.id }}">{{ category.name }}</div>
+                                </td>
+                                <td>
+                                    <span class="cat-badge {% if category.requires_size %}active{% endif %}" id="cat-size-badge-{{ category.id }}">
+                                        {% if category.requires_size %}Required{% else %}Not Needed{% endif %}
+                                    </span>
+                                </td>
+                                <td style="text-align: right;">
+                                    <div class="action-btns" style="justify-content: flex-end;">
+                                        <button class="btn-action edit-btn" data-id="{{ category.id }}">Edit</button>
+                                        <button class="btn-action delete delete-btn" data-id="{{ category.id }}">Delete</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!-- Inline Edit Row -->
+                            <tr class="inline-edit-row" id="edit-row-{{ category.id }}">
+                                <td colspan="3">
+                                    <div class="edit-grid">
+                                        <input type="text" id="edit-name-{{ category.id }}" class="form-control-drape" value="{{ category.name }}">
+                                        <label class="checkbox-group mb-0">
+                                            <input type="checkbox" id="edit-requires-size-{{ category.id }}" {% if category.requires_size %}checked{% endif %}>
+                                            <span class="checkbox-label">Sizing</span>
+                                        </label>
+                                        <div class="action-btns" style="justify-content: flex-end;">
+                                            <button class="btn-action btn-save save-btn" data-id="{{ category.id }}">Save</button>
+                                            <button class="btn-action cancel-btn" data-id="{{ category.id }}">Cancel</button>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Event delegation for all category actions
+    document.addEventListener('click', function(e) {
+        const target = e.target;
+        
+        // Handle Edit Click
+        if (target.classList.contains('edit-btn')) {
+            const id = target.getAttribute('data-id');
+            showEditRow(id);
+        }
+        
+        // Handle Cancel Click
+        if (target.classList.contains('cancel-btn')) {
+            const id = target.getAttribute('data-id');
+            hideEditRow(id);
+        }
+        
+        // Handle Save Click
+        if (target.classList.contains('save-btn')) {
+            const id = target.getAttribute('data-id');
+            saveCategoryUpdate(id);
+        }
+        
+        // Handle Delete Click
+        if (target.classList.contains('delete-btn')) {
+            const id = target.getAttribute('data-id');
+            deleteCategoryConfirm(id);
+        }
+    });
+
+    function showEditRow(id) {
+        document.getElementById('category-row-' + id).style.display = 'none';
+        document.getElementById('edit-row-' + id).style.display = 'table-row';
+    }
+
+    function hideEditRow(id) {
+        document.getElementById('category-row-' + id).style.display = 'table-row';
+        document.getElementById('edit-row-' + id).style.display = 'none';
+    }
+
+    function saveCategoryUpdate(id) {
+        const nameInput = document.getElementById('edit-name-' + id);
+        const sizeInput = document.getElementById('edit-requires-size-' + id);
+        
+        const data = {
+            name: nameInput.value,
+            requires_size: sizeInput.checked
+        };
+
+        fetch(`/update_category/${id}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(res => {
+            if(res.name) {
+                // Update UI
+                document.getElementById('cat-name-text-' + id).textContent = res.name;
+                const badge = document.getElementById('cat-size-badge-' + id);
+                badge.textContent = res.requires_size ? 'Required' : 'Not Needed';
+                if(res.requires_size) badge.classList.add('active');
+                else badge.classList.remove('active');
+                
+                hideEditRow(id);
+            }
+        })
+        .catch(err => console.error('Error updating category:', err));
+    }
+
+    function deleteCategoryConfirm(id) {
+        if (!confirm("Are you sure you want to remove this category?")) return;
+
+        fetch(`/delete_category/${id}/`, {
+            method: 'POST', // Using POST as it's safer for Django URL routing often
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                document.getElementById('category-row-' + id).remove();
+                document.getElementById('edit-row-' + id).remove();
+            } else {
+                alert('Could not delete category. It might be in use.');
+            }
+        })
+        .catch(err => console.error('Error deleting category:', err));
+    }
+
+</script>
+{% endblock %}

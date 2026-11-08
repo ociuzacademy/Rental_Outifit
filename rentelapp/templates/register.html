@@ -1,0 +1,209 @@
+{% extends 'index.html' %}
+{% block content %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+.register-section {
+    background: var(--charcoal);
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.register-card {
+    background: var(--warm-black);
+    border: 1px solid rgba(201,169,110,0.2);
+    padding: 40px;
+    width: 380px;
+}
+
+.register-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    color: var(--cream);
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.register-sub {
+    text-align: center;
+    font-size: 12px;
+    color: rgba(245,240,232,0.5);
+    margin-bottom: 30px;
+    letter-spacing: 2px;
+}
+
+.form-group {
+    margin-bottom: 18px;
+    position: relative;
+}
+
+.form-control-drape {
+    width: 100%;
+    background: transparent;
+    border: 1px solid rgba(201,169,110,0.3);
+    padding: 12px;
+    color: var(--cream);
+    font-size: 13px;
+    outline: none;
+}
+
+.form-control-drape:focus {
+    border-color: var(--gold);
+}
+
+textarea {
+    resize: none;
+    height: 70px;
+}
+
+.toggle-icon {
+    position: absolute;
+    right: 10px;
+    top: 12px;
+    color: var(--gold);
+    cursor: pointer;
+}
+
+.toggle-icon:hover {
+    color: var(--gold-light);
+}
+
+.btn-gold {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.login-text {
+    color: var(--cream); /* white-ish */
+}
+
+.login-link a {
+    color: var(--gold);
+    text-decoration: none;
+}
+
+.login-link a:hover {
+    color: var(--gold-light);
+}
+
+.error {
+    color: #ff6b6b;
+    font-size: 11px;
+}
+</style>
+
+<div class="register-section">
+    <div class="register-card">
+
+        <div class="register-title">Join DRAPE</div>
+        <div class="register-sub">CREATE YOUR ACCOUNT</div>
+
+        <form method="POST" id="registrationForm">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <input type="text" id="name" name="name" class="form-control-drape" placeholder="Full Name">
+                <div id="nameError" class="error"></div>
+            </div>
+
+            <div class="form-group">
+                <input type="email" id="email" name="email" class="form-control-drape" placeholder="Email Address">
+                <div id="emailError" class="error"></div>
+            </div>
+
+            <div class="form-group">
+                <input type="text" id="phone_number" name="phone_number" class="form-control-drape" placeholder="Phone Number">
+                <div id="phoneError" class="error"></div>
+            </div>
+
+            <div class="form-group">
+                <input type="password" id="password" name="password" class="form-control-drape" placeholder="Password">
+
+                <i id="toggleIcon"
+                   class="fa-solid fa-eye toggle-icon"
+                   onclick="togglePassword()"></i>
+
+                <div id="passwordError" class="error"></div>
+            </div>
+
+            <div class="form-group">
+                <textarea id="address" name="address" class="form-control-drape" placeholder="Address"></textarea>
+                <div id="addressError" class="error"></div>
+            </div>
+
+            <button type="submit" class="btn-gold">Create Account</button>
+
+           <div class="login-link">
+    <span class="login-text">Already have an account?</span>
+    <a href="{% url 'login' %}">Login</a>
+</div>
+        </form>
+
+    </div>
+</div>
+
+<script>
+document.getElementById('registrationForm').addEventListener('submit', function(event) {
+
+    let isValid = true;
+
+    let name = document.getElementById('name').value;
+    let email = document.getElementById('email').value;
+    let phone = document.getElementById('phone_number').value;
+    let password = document.getElementById('password').value;
+    let address = document.getElementById('address').value;
+
+    document.getElementById('nameError').textContent = '';
+    document.getElementById('emailError').textContent = '';
+    document.getElementById('phoneError').textContent = '';
+    document.getElementById('passwordError').textContent = '';
+    document.getElementById('addressError').textContent = '';
+
+    if (name.trim() === '') {
+        isValid = false;
+        document.getElementById('nameError').textContent = 'Required';
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        isValid = false;
+        document.getElementById('emailError').textContent = 'Invalid email';
+    }
+
+    const phoneRegex = /^[0-9]{10}$/;
+    if (!phoneRegex.test(phone)) {
+        isValid = false;
+        document.getElementById('phoneError').textContent = '10 digits required';
+    }
+
+    if (password.length < 6) {
+        isValid = false;
+        document.getElementById('passwordError').textContent = 'Min 6 chars';
+    }
+
+    if (address.trim() === '') {
+        isValid = false;
+        document.getElementById('addressError').textContent = 'Required';
+    }
+
+    if (!isValid) event.preventDefault();
+});
+
+function togglePassword() {
+    let passwordField = document.getElementById("password");
+    let icon = document.getElementById("toggleIcon");
+
+    if (passwordField.type === "password") {
+        passwordField.type = "text";
+        icon.classList.replace("fa-eye", "fa-eye-slash");
+    } else {
+        passwordField.type = "password";
+        icon.classList.replace("fa-eye-slash", "fa-eye");
+    }
+}
+</script>
+
+{% endblock %}

@@ -1,0 +1,734 @@
+{% extends 'admin_index.html' %}
+{% block content %}
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap');
+
+.detail-page {
+    background: var(--warm-white);
+    padding: 0 0 80px;
+    font-family: 'DM Sans', sans-serif;
+}
+
+/* ── BREADCRUMB ── */
+.detail-breadcrumb {
+    padding: 32px 48px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+.detail-breadcrumb a {
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.detail-breadcrumb a:hover { color: var(--gold); }
+.detail-breadcrumb .sep    { color: var(--bone); }
+
+/* ── MAIN GRID ── */
+.detail-wrap {
+    max-width: 1160px;
+    margin: 36px auto 0;
+    padding: 0 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--bone);
+}
+
+/* ── IMAGE PANEL ── */
+.detail-img-panel {
+    position: relative;
+    background: #f5f3ef;
+    min-height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.detail-img-panel img {
+    width: 100%;
+    height: 100%;
+    max-height: 600px;
+    object-fit: contain;
+    display: block;
+    transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.detail-img-panel:hover img { transform: scale(1.03); }
+
+.detail-img-panel .no-image {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-style: italic;
+    color: var(--bone);
+}
+
+.img-cat-label {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 9px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: #FAF8F5;
+    background: rgba(26,26,24,0.70);
+    padding: 5px 11px;
+}
+
+/* ── CONTENT PANEL ── */
+.detail-content-panel {
+    background: var(--warm-white);
+    padding: 52px 48px;
+    display: flex;
+    flex-direction: column;
+}
+
+.detail-outfit-cat {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+}
+
+.detail-outfit-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(28px, 3vw, 44px);
+    font-weight: 300;
+    color: var(--charcoal);
+    line-height: 1.1;
+    letter-spacing: -0.5px;
+    margin-bottom: 18px;
+}
+
+.detail-outfit-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 30px;
+    font-weight: 400;
+    color: var(--charcoal);
+    margin-bottom: 28px;
+    padding-bottom: 28px;
+    border-bottom: 0.5px solid var(--bone);
+}
+
+.detail-outfit-price em {
+    font-style: normal;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--muted);
+    margin-right: 4px;
+}
+
+/* ── FIELD LABEL ── */
+.field-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+}
+
+/* ── DESCRIPTION ── */
+.detail-desc {
+    font-size: 14px;
+    line-height: 1.85;
+    color: var(--muted);
+    margin-bottom: 32px;
+}
+
+/* ── SIZES ── */
+.sizes-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 36px;
+}
+
+.size-tile {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 14px;
+    border: 0.5px solid var(--bone);
+    background: white;
+    transition: border-color 0.2s;
+}
+
+.size-tile:hover { border-color: var(--gold); }
+
+.size-tile .sz-name {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--charcoal);
+}
+
+.size-tile .sz-qty {
+    font-size: 11px;
+    color: var(--muted);
+}
+
+.no-stock-note {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    font-style: italic;
+    color: var(--muted);
+}
+
+/* ── DIVIDER ── */
+.section-divider {
+    height: 0.5px;
+    background: var(--bone);
+    margin: 0 0 32px;
+}
+
+/* ── INLINE FEEDBACK (inside content panel) ── */
+.feedback-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 40px;
+    max-height: 280px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--bone) transparent;
+}
+
+.feedback-card {
+    padding: 16px 18px;
+    border: 0.5px solid var(--bone);
+    background: white;
+}
+
+.fb-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 7px;
+}
+
+.fb-user {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--charcoal);
+}
+
+.fb-stars {
+    display: flex;
+    gap: 2px;
+}
+
+.fb-star {
+    font-size: 11px;
+    color: var(--bone);
+    line-height: 1;
+}
+
+.fb-star.filled { color: #C9A96E; }
+
+.fb-comment {
+    font-size: 13px;
+    line-height: 1.65;
+    color: var(--muted);
+}
+
+/* ── ACTIONS ── */
+.detail-actions {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px;
+    margin-top: auto;
+}
+
+.drape-btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    padding: 14px 20px;
+    border: 0.5px solid var(--bone);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s;
+}
+
+.drape-btn:hover {
+    border-color: var(--charcoal);
+    color: var(--charcoal);
+}
+
+.drape-btn.btn-gold {
+    border-color: rgba(201,169,110,0.5);
+    color: var(--gold);
+}
+
+.drape-btn.btn-gold:hover {
+    background: var(--gold);
+    color: #FAF8F5;
+    border-color: var(--gold);
+}
+
+/* ══════════════════════════════════════════
+   FULL RATINGS & REVIEWS SECTION (below grid)
+══════════════════════════════════════════ */
+.reviews-outer {
+    max-width: 1160px;
+    margin: 56px auto 0;
+    padding: 0 48px;
+}
+
+.reviews-outer-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 28px;
+    padding-bottom: 18px;
+    border-bottom: 0.5px solid var(--bone);
+}
+
+.reviews-outer-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 300;
+    color: var(--charcoal);
+    letter-spacing: -0.3px;
+}
+
+.reviews-outer-title em {
+    color: #C9A96E;
+}
+
+.reviews-count-pill {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 5px 12px;
+    border: 0.5px solid var(--bone);
+}
+
+/* summary row */
+.rating-summary-row {
+    display: flex;
+    gap: 32px;
+    align-items: stretch;
+    margin-bottom: 36px;
+    background: white;
+    border: 0.5px solid var(--bone);
+}
+
+.rs-score-block {
+    padding: 32px 36px;
+    text-align: center;
+    border-right: 0.5px solid var(--bone);
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 160px;
+}
+
+.rs-big-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 72px;
+    font-weight: 300;
+    color: var(--charcoal);
+    line-height: 1;
+    margin-bottom: 10px;
+}
+
+.rs-stars {
+    display: flex;
+    gap: 3px;
+    margin-bottom: 10px;
+}
+
+.rs-stars svg { width: 14px; height: 14px; }
+
+.rs-label {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+/* bar chart */
+.rs-bars {
+    flex: 1;
+    padding: 28px 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+}
+
+.rbar-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.rbar-label {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.5px;
+    width: 36px;
+    flex-shrink: 0;
+    text-align: right;
+}
+
+.rbar-track {
+    flex: 1;
+    height: 4px;
+    background: #EDE9E2;
+    overflow: hidden;
+}
+
+.rbar-fill {
+    height: 100%;
+    transition: width 0.8s ease;
+}
+
+.rbar-high { background: #4A8C1C; }
+.rbar-mid  { background: #C9A96E; }
+.rbar-low  { background: #C0645A; }
+
+.rbar-count {
+    font-size: 11px;
+    color: var(--muted);
+    width: 24px;
+    flex-shrink: 0;
+}
+
+/* ── review cards grid ── */
+.review-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+}
+
+.review-card-admin {
+    background: white;
+    border: 0.5px solid var(--bone);
+    padding: 22px 24px;
+    transition: border-color 0.2s, transform 0.2s;
+}
+
+.review-card-admin:hover {
+    border-color: rgba(201,169,110,0.4);
+    transform: translateY(-2px);
+}
+
+.rca-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.rca-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #C9A96E;
+    color: #FAF8F5;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.rca-meta { flex: 1; }
+
+.rca-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--charcoal);
+    margin-bottom: 2px;
+}
+
+.rca-date {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.5px;
+}
+
+.rca-rating-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+}
+
+.rca-stars {
+    display: flex;
+    gap: 2px;
+}
+
+.rca-stars svg { width: 11px; height: 11px; }
+
+.rca-pill {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    padding: 2px 7px;
+    border-radius: 20px;
+}
+
+.pill-high { background: rgba(74,140,28,0.10); color: #3A7010; }
+.pill-mid  { background: rgba(201,169,110,0.18); color: #8A6010; }
+.pill-low  { background: rgba(192,100,90,0.10); color: #A0403A; }
+
+.rca-comment {
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--muted);
+    padding-left: 10px;
+    border-left: 1.5px solid #EDE9E2;
+}
+
+/* no reviews */
+.no-reviews-admin {
+    text-align: center;
+    padding: 48px 24px;
+    border: 0.5px solid var(--bone);
+    background: white;
+}
+
+.no-reviews-admin p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-style: italic;
+    color: var(--muted);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 820px) {
+    .detail-wrap          { grid-template-columns: 1fr; padding: 0 20px; }
+    .detail-breadcrumb    { padding: 20px 20px 0; }
+    .detail-img-panel     { min-height: 360px; }
+    .detail-content-panel { padding: 32px 24px; }
+    .reviews-outer        { padding: 0 20px; }
+    .rating-summary-row   { flex-direction: column; gap: 0; }
+    .rs-score-block       { border-right: none; border-bottom: 0.5px solid var(--bone); }
+    .review-cards-grid    { grid-template-columns: 1fr; }
+}
+</style>
+
+<div class="detail-page">
+
+    <!-- BREADCRUMB -->
+    <nav class="detail-breadcrumb">
+        <a href="{% url 'admin_view_outfit' %}">Collection</a>
+        <span class="sep">/</span>
+        <span>{{ outfit.name }}</span>
+    </nav>
+
+    <!-- DETAIL GRID -->
+    <div class="detail-wrap">
+
+        <!-- IMAGE PANEL -->
+        <div class="detail-img-panel">
+            <span class="img-cat-label">{{ outfit.category.name }}</span>
+            {% if outfit.image %}
+                <img src="{{ outfit.image.url }}" alt="{{ outfit.name }}">
+            {% else %}
+                <span class="no-image">No image available</span>
+            {% endif %}
+        </div>
+
+        <!-- CONTENT PANEL -->
+        <div class="detail-content-panel">
+
+            <div class="detail-outfit-cat">{{ outfit.category.name }}</div>
+            <h1 class="detail-outfit-name">{{ outfit.name }}</h1>
+
+            <div class="detail-outfit-price">
+                <em>&#8377;</em>{{ outfit.price }}
+            </div>
+
+            {% if outfit.description %}
+                <p class="field-label">Description</p>
+                <p class="detail-desc">{{ outfit.description }}</p>
+            {% endif %}
+            <!-- Delivery Date -->
+            <p class="field-label">Delivery Date</p>
+            <p class="detail-delivery-date">{{ outfit.delivery_date|date:"M d, Y" }}</p>
+            <!-- Available Sizes -->
+            <p class="field-label">Available sizes</p>
+            <div class="sizes-grid">
+                {% for s in outfit.sizes.all %}
+                    <div class="size-tile">
+                        <span class="sz-name">{{ s.size }}</span>
+                        <span class="sz-qty">&#215; {{ s.quantity }}</span>
+                    </div>
+                {% empty %}
+                    <span class="no-stock-note">No stock available</span>
+                {% endfor %}
+            </div>
+
+            <!-- Quick feedback preview (max 3, scrollable) -->
+            {% if feedback %}
+                <div class="section-divider"></div>
+                <p class="field-label">Recent feedback · {{ total_reviews }} review{{ total_reviews|pluralize }}</p>
+                <div class="feedback-stack">
+                    {% for fb in feedback|slice:":3" %}
+                    <div class="feedback-card">
+                        <div class="fb-header">
+                            <span class="fb-user">{{ fb.user.name }}</span>
+                            <div class="fb-stars">
+                                {% for i in "12345" %}
+                                    {% if forloop.counter <= fb.rating %}
+                                        <span class="fb-star filled">&#9733;</span>
+                                    {% else %}
+                                        <span class="fb-star">&#9733;</span>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% if fb.comment %}
+                        <p class="fb-comment">{{ fb.comment }}</p>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <!-- ACTIONS -->
+            <div class="detail-actions">
+                <a href="{% url 'admin_view_outfit' %}" class="drape-btn btn-gold">&#8592; Back to collection</a>
+                <a href="{% url 'edit_outfit' outfit.id %}" class="drape-btn">Edit</a>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         FULL RATINGS & REVIEWS — below the grid
+    ══════════════════════════════════════════ -->
+    <div class="reviews-outer">
+
+        <div class="reviews-outer-header">
+            <div class="reviews-outer-title">Ratings &amp; <em>Reviews</em></div>
+            <span class="reviews-count-pill">{{ total_reviews }} verified rental{{ total_reviews|pluralize }}</span>
+        </div>
+
+                        {% if total_reviews > 0 %}
+
+        <!-- Summary row -->
+        <div class="rating-summary-row">
+
+            <!-- Big score -->
+            <div class="rs-score-block">
+                <div class="rs-big-num">{{ avg_rating }}</div>
+                <div class="rs-stars">
+                    {% for i in "12345" %}
+                        {% if forloop.counter <= avg_rating %}
+                            <svg viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7" fill="#C9A96E"/></svg>
+                        {% else %}
+                            <svg viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7" fill="#EDE9E2"/></svg>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="rs-label">out of 5</div>
+            </div>
+
+            <!-- Bar breakdown — Django tags in HTML only, never in CSS -->
+            <div class="rs-bars">
+                {% for star, count in rating_counts.items %}
+                <div class="rbar-row">
+                    <span class="rbar-label">{{ star }} ★</span>
+                    <div class="rbar-track">
+                        {% if star >= 4 %}
+                            <div class="rbar-fill rbar-high" data-count="{{ count }}" data-total="{{ total_reviews }}"></div>
+                        {% elif star == 3 %}
+                            <div class="rbar-fill rbar-mid" data-count="{{ count }}" data-total="{{ total_reviews }}"></div>
+                        {% else %}
+                            <div class="rbar-fill rbar-low" data-count="{{ count }}" data-total="{{ total_reviews }}"></div>
+                        {% endif %}
+                    </div>
+                    <span class="rbar-count">{{ count }}</span>
+                </div>
+                {% endfor %}
+            </div>
+
+        </div>
+
+        <!-- Review cards -->
+        <div class="review-cards-grid">
+            {% for fb in feedback %}
+            <div class="review-card-admin">
+                <div class="rca-top">
+                    <div class="rca-avatar">{{ fb.user.name|first|upper }}</div>
+                    <div class="rca-meta">
+                        <div class="rca-name">{{ fb.user.name }}</div>
+                        <div class="rca-date">{{ fb.created_at|date:"d M Y" }}</div>
+                    </div>
+                    <div class="rca-rating-wrap">
+                        <div class="rca-stars">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= fb.rating %}
+                                    <svg viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7" fill="#C9A96E"/></svg>
+                                {% else %}
+                                    <svg viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7" fill="#EDE9E2"/></svg>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        {% if fb.rating >= 4 %}
+                            <span class="rca-pill pill-high">{{ fb.rating }}/5</span>
+                        {% elif fb.rating == 3 %}
+                            <span class="rca-pill pill-mid">{{ fb.rating }}/5</span>
+                        {% else %}
+                            <span class="rca-pill pill-low">{{ fb.rating }}/5</span>
+                        {% endif %}
+                    </div>
+                </div>
+                {% if fb.comment %}
+                <p class="rca-comment">{{ fb.comment }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+
+        {% else %}
+
+        <div class="no-reviews-admin">
+            <p>No customer feedback yet for this piece.</p>
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.rbar-fill').forEach(el => {
+        const count = parseInt(el.getAttribute('data-count')) || 0;
+        const total = parseInt(el.getAttribute('data-total')) || 0;
+        let pct = 0;
+        if (total) pct = Math.round((count / total) * 100);
+        el.style.width = pct + '%';
+    });
+});
+</script>

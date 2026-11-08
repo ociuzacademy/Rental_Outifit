@@ -1,0 +1,1410 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Rent premium outfits for any occasion">
+  <meta name="author" content="">
+  <link
+    href="https://fonts.googleapis.com/css?family=Cormorant+Garamond:300,400,500,600,700|DM+Sans:300,400,500&display=swap"
+    rel="stylesheet">
+
+  <title>DRAPE — My Dashboard</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- Bootstrap core CSS -->
+  <link href="/static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Additional CSS Files -->
+  <link rel="stylesheet" href="/static/assets/css/fontawesome.css">
+  <link rel="stylesheet" href="/static/assets/css/owl.css">
+
+  <style>
+    :root {
+      --cream: #F5F0E8;
+      --bone: #EDE7D9;
+      --charcoal: #1A1A18;
+      --warm-black: #111110;
+      --gold: #C9A96E;
+      --gold-light: #E2C99A;
+      --muted: #7A7268;
+      --warm-white: #FDFAF5;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--warm-white);
+      color: var(--charcoal);
+      overflow-x: hidden;
+    }
+
+    /* ── PRE-HEADER ── */
+    #pre-header {
+      background: var(--charcoal);
+      color: var(--gold-light);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      text-align: center;
+      padding: 10px 0;
+    }
+
+    /* ── NAVBAR ── */
+    .navbar {
+      background: var(--warm-black) !important;
+      padding: 20px 0;
+      border-bottom: 1px solid rgba(201, 169, 110, 0.2);
+    }
+
+    .navbar-brand span {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      font-weight: 300;
+      letter-spacing: 6px;
+      color: var(--cream);
+      text-transform: uppercase;
+    }
+
+    .nav-link {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(245, 240, 232, 0.7) !important;
+      margin: 0 12px;
+      transition: color 0.3s;
+      padding: 6px 0 !important;
+      position: relative;
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--gold);
+      transition: width 0.3s;
+    }
+
+    .nav-link:hover {
+      color: var(--gold) !important;
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    .nav-item.active .nav-link {
+      color: var(--gold) !important;
+    }
+
+    .nav-item.active .nav-link::after {
+      width: 100%;
+    }
+
+    /* logout styled differently */
+    .nav-logout .nav-link {
+      color: rgba(201, 169, 110, 0.6) !important;
+      border: 1px solid rgba(201, 169, 110, 0.25);
+      padding: 6px 16px !important;
+      margin-left: 8px;
+      transition: all 0.3s;
+    }
+
+    .nav-logout .nav-link::after {
+      display: none;
+    }
+
+    .nav-logout .nav-link:hover {
+      color: var(--warm-black) !important;
+      background: var(--gold);
+      border-color: var(--gold);
+    }
+
+    /* ── USER HERO ── */
+    .user-hero {
+      background: var(--charcoal);
+      padding: 70px 0 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .user-hero::before {
+      content: 'DRAPE';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 200px;
+      font-weight: 700;
+      color: rgba(201, 169, 110, 0.04);
+      letter-spacing: 30px;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    .user-hero-inner {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 28px;
+    }
+
+    .user-greeting-tag {
+      font-size: 10px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .user-greeting-tag::before {
+      content: '';
+      width: 36px;
+      height: 1px;
+      background: var(--gold);
+    }
+
+    .user-hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(36px, 4vw, 58px);
+      font-weight: 300;
+      color: var(--cream);
+      line-height: 1.1;
+      letter-spacing: -0.5px;
+    }
+
+    .user-hero h1 em {
+      font-style: italic;
+      color: var(--gold-light);
+    }
+
+    .user-hero p {
+      font-size: 14px;
+      color: rgba(245, 240, 232, 0.5);
+      margin-top: 12px;
+      max-width: 400px;
+      line-height: 1.7;
+    }
+
+    .user-quick-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn-gold {
+      background: var(--gold);
+      color: var(--warm-black);
+      font-size: 11px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      padding: 14px 30px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+    }
+
+    .btn-gold:hover {
+      background: var(--gold-light);
+      color: var(--warm-black);
+      text-decoration: none;
+      transform: translateY(-2px);
+    }
+
+    .btn-outline-cream {
+      background: transparent;
+      color: var(--cream);
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 13px 26px;
+      border: 1px solid rgba(245, 240, 232, 0.25);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .btn-outline-cream:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+      text-decoration: none;
+    }
+
+    /* ── STATS BAR ── */
+    .user-stats-bar {
+      background: var(--warm-black);
+      border-bottom: 1px solid rgba(201, 169, 110, 0.12);
+      padding: 0;
+    }
+
+    .user-stats-inner {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .user-stat-item {
+      padding: 28px 32px;
+      border-right: 1px solid rgba(201, 169, 110, 0.08);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      transition: background 0.3s;
+    }
+
+    .user-stat-item:last-child {
+      border-right: none;
+    }
+
+    .user-stat-item:hover {
+      background: rgba(201, 169, 110, 0.04);
+    }
+
+    .user-stat-icon {
+      width: 42px;
+      height: 42px;
+      border: 1px solid rgba(201, 169, 110, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold);
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+
+    .user-stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px;
+      color: var(--cream);
+      line-height: 1;
+      font-weight: 300;
+    }
+
+    .user-stat-label {
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(245, 240, 232, 0.35);
+      margin-top: 2px;
+    }
+
+    /* ── SECTION COMMON ── */
+    .section-label {
+      font-size: 10px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .section-label::before {
+      content: '';
+      width: 30px;
+      height: 1px;
+      background: var(--gold);
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(32px, 4vw, 52px);
+      font-weight: 300;
+      color: var(--charcoal);
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+
+    .section-title em {
+      font-style: italic;
+      color: var(--muted);
+    }
+
+    .section-sub {
+      font-size: 14px;
+      color: var(--muted);
+      max-width: 480px;
+      line-height: 1.7;
+      margin-bottom: 48px;
+    }
+
+    /* ── OUTFIT GRID ── */
+    .featured-section {
+      padding: 80px 0 100px;
+      background: var(--cream);
+    }
+
+    .outfit-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 56px;
+    }
+
+    .outfit-card {
+      background: var(--warm-white);
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+      position: relative;
+    }
+
+    .outfit-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 24px 60px rgba(26, 26, 24, 0.12);
+    }
+
+    .outfit-img {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 3/4;
+    }
+
+    .outfit-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+      filter: brightness(0.92);
+    }
+
+    .outfit-card:hover .outfit-img img {
+      transform: scale(1.04);
+    }
+
+    .outfit-badge {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      background: var(--charcoal);
+      color: var(--gold);
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 6px 12px;
+    }
+
+    .outfit-badge.available {
+      background: #2D5016;
+      color: #A8D57A;
+    }
+
+    .outfit-badge.limited {
+      background: #4A2800;
+      color: #E09650;
+    }
+
+    .outfit-quick-book {
+      position: absolute;
+      bottom: -60px;
+      left: 0;
+      right: 0;
+      background: var(--gold);
+      color: var(--warm-black);
+      text-align: center;
+      padding: 14px;
+      font-size: 10px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: none;
+      font-family: 'DM Sans', sans-serif;
+      width: 100%;
+      text-decoration: none !important;
+      display: block;
+    }
+
+    .outfit-card:hover .outfit-quick-book {
+      bottom: 0;
+    }
+
+    .outfit-info {
+      padding: 20px 20px 24px;
+      border-top: 1px solid var(--bone);
+    }
+
+    .outfit-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .outfit-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--charcoal);
+      margin-bottom: 4px;
+    }
+
+    .outfit-designer {
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 1px;
+    }
+
+    .outfit-price {
+      text-align: right;
+    }
+
+    .price-per-day {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      color: var(--charcoal);
+      font-weight: 600;
+    }
+
+    .price-label {
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 1px;
+    }
+
+    .outfit-sizes {
+      margin-top: 12px;
+      display: flex;
+      gap: 6px;
+    }
+
+    .size-dot {
+      width: 26px;
+      height: 26px;
+      border: 1px solid var(--bone);
+      font-size: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .size-dot:hover,
+    .size-dot.active {
+      border-color: var(--charcoal);
+      background: var(--charcoal);
+      color: var(--cream);
+    }
+
+    /* ── MY ORDERS STRIP ── */
+    .orders-section {
+      padding: 80px 0;
+      background: var(--warm-white);
+    }
+
+    .orders-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .view-all-link {
+      font-size: 10px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: gap 0.3s;
+    }
+
+    .view-all-link:hover {
+      gap: 14px;
+      color: var(--gold);
+      text-decoration: none;
+    }
+
+    .view-all-link::after {
+      content: '→';
+    }
+
+    .orders-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .orders-table thead th {
+      font-size: 9px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--bone);
+      font-weight: 400;
+      text-align: left;
+    }
+
+    .orders-table tbody tr {
+      border-bottom: 1px solid var(--bone);
+      transition: background 0.2s;
+    }
+
+    .orders-table tbody tr:hover {
+      background: #fdf8f0;
+    }
+
+    .orders-table tbody td {
+      padding: 18px 20px;
+      font-size: 13px;
+      color: var(--charcoal);
+      vertical-align: middle;
+    }
+
+    .order-outfit-thumb {
+      width: 48px;
+      height: 60px;
+      object-fit: cover;
+      filter: brightness(0.9);
+      flex-shrink: 0;
+    }
+
+    .order-outfit-cell {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .order-outfit-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 17px;
+      color: var(--charcoal);
+      margin-bottom: 2px;
+    }
+
+    .order-outfit-sub {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .order-status {
+      font-size: 9px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      display: inline-block;
+    }
+
+    .status-active {
+      background: #EBF5E1;
+      color: #3A7A10;
+    }
+
+    .status-returned {
+      background: #EEE;
+      color: var(--muted);
+    }
+
+    .status-upcoming {
+      background: #FFF4E0;
+      color: #8A5A00;
+    }
+
+    .order-action-btn {
+      font-size: 9px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-decoration: none;
+      border: 1px solid rgba(201, 169, 110, 0.4);
+      padding: 6px 14px;
+      transition: all 0.2s;
+    }
+
+    .order-action-btn:hover {
+      background: var(--gold);
+      color: var(--warm-black);
+      text-decoration: none;
+    }
+
+    /* ── CATEGORIES ── */
+    .categories-section {
+      padding: 80px 0 100px;
+      background: var(--charcoal);
+    }
+
+    .categories-section .section-title {
+      color: var(--cream);
+    }
+
+    .categories-section .section-sub {
+      color: rgba(245, 240, 232, 0.45);
+    }
+
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+    }
+
+    .category-card {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      aspect-ratio: 3/4;
+    }
+
+    .category-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+      filter: brightness(0.6);
+    }
+
+    .category-card:hover img {
+      transform: scale(1.07);
+      filter: brightness(0.75);
+    }
+
+    .category-info {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 28px 24px;
+      background: linear-gradient(to top, rgba(17, 17, 16, 0.92) 0%, transparent 100%);
+    }
+
+    .category-tag {
+      font-size: 9px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+
+    .category-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--cream);
+      margin-bottom: 4px;
+    }
+
+    .category-count {
+      font-size: 11px;
+      color: rgba(245, 240, 232, 0.45);
+    }
+
+    /* ── HOW IT WORKS ── */
+    .how-section {
+      padding: 90px 0;
+      background: var(--bone);
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 40px;
+      margin-top: 60px;
+      position: relative;
+    }
+
+    .steps-grid::before {
+      content: '';
+      position: absolute;
+      top: 32px;
+      left: 10%;
+      right: 10%;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold), transparent);
+      opacity: 0.35;
+    }
+
+    .step-card {
+      text-align: center;
+    }
+
+    .step-num {
+      width: 64px;
+      height: 64px;
+      border: 1px solid rgba(201, 169, 110, 0.4);
+      margin: 0 auto 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      color: var(--gold);
+      background: var(--bone);
+    }
+
+    .step-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      color: var(--charcoal);
+      margin-bottom: 10px;
+      font-weight: 400;
+    }
+
+    .step-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* ── SUBSCRIBE ── */
+    .subscribe-section {
+      padding: 90px 0;
+      background: var(--warm-black);
+    }
+
+    .subscribe-inner {
+      max-width: 540px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .subscribe-section .section-label {
+      justify-content: center;
+    }
+
+    .subscribe-section .section-label::before {
+      display: none;
+    }
+
+    .subscribe-section .section-title {
+      color: var(--cream);
+      margin: 0 auto 12px;
+    }
+
+    .subscribe-section .section-sub {
+      color: rgba(245, 240, 232, 0.4);
+      margin: 0 auto 36px;
+    }
+
+    .subscribe-form-row {
+      display: flex;
+    }
+
+    .subscribe-input {
+      flex: 1;
+      background: rgba(245, 240, 232, 0.07);
+      border: 1px solid rgba(201, 169, 110, 0.3);
+      border-right: none;
+      color: var(--cream);
+      padding: 16px 22px;
+      font-size: 13px;
+      font-family: 'DM Sans', sans-serif;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .subscribe-input:focus {
+      border-color: var(--gold);
+    }
+
+    .subscribe-input::placeholder {
+      color: rgba(245, 240, 232, 0.3);
+    }
+
+    .subscribe-btn {
+      background: var(--gold);
+      color: var(--warm-black);
+      border: none;
+      padding: 16px 28px;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.3s;
+      white-space: nowrap;
+    }
+
+    .subscribe-btn:hover {
+      background: var(--gold-light);
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      background: #0D0D0C;
+      padding: 60px 0 40px;
+      border-top: 1px solid rgba(201, 169, 110, 0.12);
+    }
+
+    .footer-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px;
+      font-weight: 300;
+      letter-spacing: 6px;
+      color: var(--cream);
+      text-transform: uppercase;
+      margin-bottom: 32px;
+      text-align: center;
+    }
+
+    .footer-menu {
+      display: flex;
+      justify-content: center;
+      gap: 36px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+
+    .footer-menu a {
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(245, 240, 232, 0.4);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer-menu a:hover {
+      color: var(--gold);
+    }
+
+    .footer-social {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+    }
+
+    .footer-social a {
+      width: 36px;
+      height: 36px;
+      border: 1px solid rgba(201, 169, 110, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(245, 240, 232, 0.4);
+      text-decoration: none;
+      font-size: 13px;
+      transition: all 0.3s;
+    }
+
+    .footer-social a:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .sub-footer {
+      background: #0D0D0C;
+      text-align: center;
+      padding: 20px 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .sub-footer p {
+      font-size: 11px;
+      color: rgba(245, 240, 232, 0.2);
+      letter-spacing: 1px;
+    }
+
+    .sub-footer a {
+      color: rgba(201, 169, 110, 0.5);
+      text-decoration: none;
+    }
+
+    .sub-footer a:hover {
+      color: var(--gold);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 991px) {
+      .user-stats-inner {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .outfit-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .category-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .steps-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .steps-grid::before {
+        display: none;
+      }
+
+      .orders-table thead {
+        display: none;
+      }
+
+      .orders-table tbody td {
+        display: block;
+        padding: 8px 16px;
+      }
+
+      .orders-table tbody tr {
+        display: block;
+        margin-bottom: 16px;
+        border: 1px solid var(--bone);
+      }
+    }
+
+    @media (max-width: 576px) {
+      .user-stats-inner {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .outfit-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .category-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .subscribe-form-row {
+        flex-direction: column;
+      }
+
+      .subscribe-input {
+        border-right: 1px solid rgba(201, 169, 110, 0.3);
+        border-bottom: none;
+      }
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .user-hero-inner>* {
+      animation: fadeUp 0.8s ease forwards;
+      opacity: 0;
+    }
+
+    .user-hero-inner>*:nth-child(1) {
+      animation-delay: 0.1s;
+    }
+
+    .user-hero-inner>*:nth-child(2) {
+      animation-delay: 0.25s;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Pre Header -->
+  <div id="pre-header">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <span>Free delivery on rentals above ₹2000 &nbsp;·&nbsp; Dry-cleaning included &nbsp;·&nbsp; Return in 3
+            days</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+    <div class="container">
+      <a class="navbar-brand" href="{% url 'user_index' %}"><span>DRAPE</span></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+        aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="{% url 'user_index' %}">Home <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'user_view_outfit' %}">View Outfits</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'my_orders' %}">My Orders</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'view_profile' %}">Profile</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'view_wishlist' %}">Wishlist</a>
+          </li>
+          <li class="nav-item nav-logout">
+            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  {% block content %}
+
+  <!-- ── USER HERO ── -->
+  <div class="user-hero">
+    <div class="container">
+      <div class="user-hero-inner">
+        <div>
+          <div class="user-greeting-tag">Welcome Back</div>
+          <h1>Your Style,<br><em>Your Wardrobe</em></h1>
+          <p>Discover new arrivals, track your bookings, and find your next favourite look — all in one place.</p>
+          <div class="user-quick-actions" style="margin-top: 32px;">
+            <a href="{% url 'user_view_outfit' %}" class="btn-gold">Browse Outfits</a>
+            <a href="{% url 'my_orders' %}" class="btn-outline-cream">My Orders</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── USER STATS BAR ── -->
+  <div class="user-stats-bar">
+    <div class="container-fluid px-0">
+      <div class="user-stats-inner">
+
+        <div class="user-stat-item">
+          <div class="user-stat-icon"><i class="fa fa-bag-shopping"></i></div>
+          <div>
+            <div class="user-stat-num">{{ total_orders }}</div>
+            <div class="user-stat-label">Total Orders</div>
+          </div>
+        </div>
+
+        <div class="user-stat-item">
+          <div class="user-stat-icon"><i class="fa fa-clock"></i></div>
+          <div>
+            <div class="user-stat-num">{{ active_orders }}</div>
+            <div class="user-stat-label">Active Rentals</div>
+          </div>
+        </div>
+
+        <div class="user-stat-item">
+          <div class="user-stat-icon"><i class="fa fa-heart"></i></div>
+          <div>
+            <div class="user-stat-num">{{ wishlist_count }}</div>
+            <div class="user-stat-label">Wishlist</div>
+          </div>
+        </div>
+
+        <div class="user-stat-item">
+          <div class="user-stat-icon"><i class="fa fa-indian-rupee-sign"></i></div>
+          <div>
+            <div class="user-stat-num">₹{{ total_spent }}</div>
+            <div class="user-stat-label">Total Spent</div>
+          </div>
+        </div>
+
+      </div><!-- /user-stats-inner -->
+    </div><!-- /container-fluid -->
+  </div><!-- /user-stats-bar -->
+
+  <!-- ── RECENT ORDERS ── -->
+  <div class="orders-section">
+    <div class="container">
+
+      <div class="orders-header">
+        <div>
+          <div class="section-label">Your Rentals</div>
+          <div class="section-title">Recent <em>Orders</em></div>
+        </div>
+        <a href="{% url 'my_orders' %}" class="view-all-link">View All</a>
+      </div>
+
+      <table class="orders-table">
+        <thead>
+          <tr>
+            <th>Outfit</th>
+            <th>Date</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for order in recent_orders %}
+          <tr>
+            <!-- Outfit -->
+            <td>
+              <div class="order-outfit-cell">
+                <img class="order-outfit-thumb" src="{{ order.outfit.image.url }}" alt="{{ order.outfit.name }}">
+                <div>
+                  <div class="order-outfit-name">{{ order.outfit.name }}</div>
+                  <div class="order-outfit-sub">Size: {{ order.size|default:"-" }}</div>
+                </div>
+              </div>
+            </td>
+            <!-- Date -->
+            <td>{{ order.booking_date|date:"M d, Y" }}</td>
+            <!-- Price -->
+            <td>₹{{ order.outfit.price }}</td>
+            <!-- Status -->
+            <td>
+              {% if order.status == "ordered" %}
+              <span class="order-status status-upcoming">Pending</span>
+              {% elif order.status == "completed" %}
+              <span class="order-status status-returned">Completed</span>
+              {% elif order.status == "cancelled" %}
+              <span class="order-status" style="background:#FEE2E2;color:#B91C1C;">Cancelled</span>
+              {% endif %}
+            </td>
+            <!-- Action -->
+            <td>
+              <a href="{% url 'my_orders' %}" class="order-action-btn">Details</a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="5" style="text-align:center; color:var(--muted); padding: 40px;">No orders found</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+    </div><!-- /container -->
+  </div><!-- /orders-section -->
+
+  <!-- ── FEATURED OUTFITS ── -->
+
+
+  <div class="featured-section" id="featured">
+    <div class="container">
+      <div class="section-label">New Arrivals</div>
+      <div class="section-title">Featured <em>Outfits</em></div>
+      <p class="section-sub">Handpicked pieces from top designers. Available for 1–7 day rentals.</p>
+
+      ```
+      <div class="outfit-grid">
+
+        {% for outfit in featured_outfits %}
+        <div class="outfit-card">
+          <div class="outfit-img">
+
+            {% if outfit.image %}
+            <img src="{{ outfit.image.url }}" alt="{{ outfit.name }}">
+            {% else %}
+            <img src="https://via.placeholder.com/500x600" alt="outfit">
+            {% endif %}
+
+            <!-- Availability -->
+            {% if outfit.is_available %}
+            <span class="outfit-badge available">Available</span>
+            {% else %}
+            <span class="outfit-badge">No Stock</span>
+            {% endif %}
+
+            <a href="{% url 'user_view_outfit_details' outfit.id %}" class="outfit-quick-book">
+              Book Now
+            </a>
+
+          </div>
+
+          <div class="outfit-info">
+            <div class="outfit-meta">
+              <div>
+                <div class="outfit-name">{{ outfit.name }}</div>
+                <div class="outfit-designer">
+                  {{ outfit.category.name|default:"Designer" }}
+                </div>
+              </div>
+
+              <div class="outfit-price">
+                <div class="price-per-day">₹{{ outfit.price }}</div>
+                <div class="price-label">per day</div>
+              </div>
+            </div>
+
+            <!-- Sizes -->
+            <div class="outfit-sizes">
+              {% for s in outfit.sizes.all %}
+              {% if s.quantity > 0 %}
+              <div class="size-dot">{{ s.size }}</div>
+              {% else %}
+              <div class="size-outofstock">{{ s.size }}</div>
+              {% endif %}
+              {% empty %}
+              <span style="font-size:10px;">No sizes</span>
+              {% endfor %}
+            </div>
+
+          </div>
+        </div>
+        {% endfor %}
+
+      </div>
+
+      <div style="text-align:center; margin-top: 48px;">
+        <a href="{% url 'user_view_outfit' %}" class="btn-gold">View All Outfits</a>
+      </div>
+      ```
+
+    </div>
+  </div>
+
+
+  <!-- ── SHOP BY OCCASION ── -->
+  <div class="categories-section">
+    <div class="container">
+      <div class="section-label">Shop by Occasion</div>
+      <div class="section-title">Find Your <em>Perfect Look</em></div>
+      <p class="section-sub">Every occasion deserves an outfit as unique as the memory you'll create.</p>
+
+      <div class="category-grid">
+        <div class="category-card">
+          <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=500&q=80" alt="Wedding">
+          <div class="category-info">
+            <div class="category-tag">Collection</div>
+            <div class="category-name">Wedding</div>
+            <div class="category-count">48 outfits available</div>
+          </div>
+        </div>
+        <div class="category-card">
+          <img src="https://images.unsplash.com/photo-1574179300230-97b29e767d82?w=500&q=80" alt="Party">
+          <div class="category-info">
+            <div class="category-tag">Collection</div>
+            <div class="category-name">Party & Night Out</div>
+            <div class="category-count">62 outfits available</div>
+          </div>
+        </div>
+        <div class="category-card">
+          <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=500&q=80" alt="Traditional">
+          <div class="category-info">
+            <div class="category-tag">Collection</div>
+            <div class="category-name">Traditional</div>
+            <div class="category-count">74 outfits available</div>
+          </div>
+        </div>
+        <div class="category-card">
+          <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=500&q=80" alt="Formal">
+          <div class="category-info">
+            <div class="category-tag">Collection</div>
+            <div class="category-name">Formal & Corporate</div>
+            <div class="category-count">35 outfits available</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── HOW IT WORKS ── -->
+  <div class="how-section">
+    <div class="container">
+      <div class="text-center">
+        <div class="section-label" style="justify-content:center;">Simple Process</div>
+        <div class="section-title" style="text-align:center;">How <em>DRAPE</em> Works</div>
+      </div>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-num">01</div>
+          <div class="step-title">Browse & Choose</div>
+          <p class="step-desc">Explore hundreds of curated outfits filtered by occasion, size, and budget.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">02</div>
+          <div class="step-title">Book Your Dates</div>
+          <p class="step-desc">Select your rental period — 1 to 7 days. We'll check availability instantly.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">03</div>
+          <div class="step-title">We Deliver</div>
+          <p class="step-desc">Your outfit arrives cleaned, pressed, and packaged to your doorstep.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">04</div>
+          <div class="step-title">Wear & Return</div>
+          <p class="step-desc">Enjoy your moment. Return with our prepaid label — no dry-cleaning needed.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SUBSCRIBE ── -->
+  <div class="subscribe-section">
+    <div class="container">
+      <div class="subscribe-inner">
+        <div class="section-label" style="justify-content:center; margin-bottom:10px;">Stay in Style</div>
+        <div class="section-title" style="color:var(--cream); text-align:center;">New Arrivals, <em>First</em></div>
+        <p class="section-sub" style="text-align:center;">Get notified when new designer outfits are added. Exclusive
+          early access for subscribers.</p>
+        <div class="subscribe-form-row">
+          <input type="email" class="subscribe-input" placeholder="Your email address">
+          <button class="subscribe-btn">Subscribe</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── FOOTER ── -->
+  <div class="footer">
+    <div class="container">
+      <div class="footer-logo">DRAPE</div>
+      <div class="footer-menu">
+        <a href="#">Home</a>
+        <a href="#">Help</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">How It Works</a>
+        <a href="#">Contact Us</a>
+      </div>
+      <div class="footer-social">
+        <a href="#"><i class="fa fa-facebook"></i></a>
+        <a href="#"><i class="fa fa-twitter"></i></a>
+        <a href="#"><i class="fa fa-instagram"></i></a>
+        <a href="#"><i class="fa fa-pinterest"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-footer">
+    <div class="container">
+      <p>Copyright &copy; 2025 DRAPE Outfit Rentals — Design by <a href="#">Your Studio</a></p>
+    </div>
+  </div>
+
+  {% endblock %}
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="/static/vendor/jquery/jquery.min.js"></script>
+  <script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="/static/assets/js/custom.js"></script>
+  <script src="/static/assets/js/owl.js"></script>
+
+  <script>
+    document.querySelectorAll('.size-dot').forEach(dot => {
+      dot.addEventListener('click', function () {
+        this.closest('.outfit-sizes').querySelectorAll('.size-dot').forEach(d => d.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+  </script>
+
+</body>
+
+</html>
